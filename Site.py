@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 
 def f_reset1():    #reset function of Sign Up
@@ -12,8 +13,38 @@ def f_reset2():    #reset function of Sign In
     txt_pw.delete(0, END)
     txt_user.delete(0, END)
 
-#Main Page 
-window = Tk()       #Main window
+def sign_up():      #sign up function
+    if txt_uppw.get() == txt_rpw.get():
+        messagebox.showinfo(title="Sucess", message="Your account has been created!")
+        save = txt_fname.get() + txt_lname.get() + ";" + txt_email.get() + ";" + txt_uppw.get() + ";" + "user" + "\n"
+        f = open("utilizadores.txt", "a", encoding="UTF-8")                #append the new data
+        f.write(save)       
+        f.close()
+        f_reset1()
+    else:
+        messagebox.showerror(title="Warning!", message="The passwords must be the same!")
+
+def sign_in():      #sign in function
+    sucess = False
+    f = open("utilizadores.txt", "r", encoding="UTF-8")
+    for line in f:
+        words = line.split(";")
+        if txt_user.get() == words[1] and txt_pw.get() == words[2]:
+            sucess=True
+            f.close()
+            window.destroy()
+            menu()       
+    if sucess == False:
+        messagebox.showerror(title="Warning!", message="The password or email doesn't exist or are incorrect!")
+        f_reset2()
+
+def menu():
+    new_window = Tk()
+    new_window.geometry("1000x800")
+    window.title("WEBFLIX")
+
+#Sign In/Sin Up Menu 
+window = Tk()       #Main Window
 window.geometry("1000x800")
 window.title("WEBFLIX")
 
@@ -32,7 +63,7 @@ lbl_pw.place(x=500, y=540)
 txt_pw = Entry(window, width="30", show="*")
 txt_pw.place(x=560, y=540)
 
-btn1 = Button(window, text="Sign In", fg="blue")
+btn1 = Button(window, text="Sign In", fg="blue", command=sign_in)
 btn1.place(x=600, y=600)
 
 #Sign Up
@@ -65,7 +96,7 @@ lbl_rpw.place(x=125, y=550)
 txt_rpw = Entry(window, width="27", show="*")
 txt_rpw.place(x=260, y=550)
 
-btn2 = Button(window, text="Sign Up", fg="blue")
+btn2 = Button(window, text="Sign Up", fg="blue", command=sign_up)
 btn2.place(x=290, y=600)
 
 #Reset
