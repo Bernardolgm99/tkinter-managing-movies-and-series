@@ -181,7 +181,7 @@ class app():
 
         reset_btn2 = Button(window, text="Reset", fg="red", command=self.reset_sign_up)
         reset_btn2.place(x=350, y=600)
-        reset_btn1 = Button(window, text="Reset", fg="red", command=self.reset_sign_up)
+        reset_btn1 = Button(window, text="Reset", fg="red", command=self.reset_sign_in)
         reset_btn1.place(x=650, y=600)
 
         #window
