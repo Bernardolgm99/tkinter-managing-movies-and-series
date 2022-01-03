@@ -1,13 +1,16 @@
-from tkinter import *
+from tkinter import *  # type: ignore
 from tkinter import messagebox
+import function
+
 
 def perfil():
     perfil_window = Tk()
     perfil_window.geometry("400x600")
     perfil_window.title("Perfil")
 
-    #window
+    # window
     perfil_window.mainloop()
+
 
 def menu():
     new_window = Tk()
@@ -18,11 +21,9 @@ def menu():
     Menu_bar = Menu(new_window)
 
     Menu_bar.add_command(label="User Perfil", command=perfil)
-    Menu_bar.add_command(label="Quit", command = quit)
+    Menu_bar.add_command(label="Quit", command=quit)
 
     new_window.configure(menu=Menu_bar)
-    
-    #window
+
+    # window
     new_window.mainloop()
-
-

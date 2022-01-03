@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import *  # type: ignore
 from tkinter import messagebox
 import function
 import menu
@@ -23,7 +23,7 @@ def sign_up():  # sign up function
             title="Sucess", message="Your account has been created!")
         save = txt_fname.get() + txt_lname.get() + ";" + txt_email.get() + \
             ";" + txt_uppw.get() + ";" + "user" + "\n"
-        with open("users.csv", "a", encoding="UTF-8") as f:  # append the new data
+        with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
         reset_sign_up()
     else:
@@ -33,7 +33,7 @@ def sign_up():  # sign up function
 
 def sign_in():  # sign in function
     sucess = False
-    with open("users.csv", "r", encoding="UTF-8") as f:
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             words = line.split(";")
             if txt_user.get() == words[1] and txt_pw.get() == words[2]:
