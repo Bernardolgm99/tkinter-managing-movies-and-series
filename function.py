@@ -14,13 +14,13 @@ def place_label(window: Misc, text: str, x: int, y: int, fg: str = "black") -> L
     return label
 
 
-def place_entry(window: Misc, width: int, x: int, y: int, show: str = None) -> Entry:
-    entry = Entry(window, width=width)
+def place_entry(window: Misc, width: int, x: int, y: int, show: str = "") -> Entry:
+    entry = Entry(window, width=width, show=show)
     entry.place(x=x, y=y)
     return entry
 
 
-def place_button(window: Misc, text: str, fg: str, command, x: int, y: int):
+def place_button(window: Misc, text: str, fg: str, command, x: int, y: int) -> Button:
     button = Button(window, text=text, fg=fg, command=command)
-    button.place(x=x,y=y)
+    button.place(x=x, y=y)
     return button
