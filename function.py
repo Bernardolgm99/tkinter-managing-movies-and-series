@@ -1,5 +1,5 @@
-from tkinter import LabelFrame, Misc, Entry, Label, Button
-
+from tkinter import LabelFrame, Misc, Entry, Label, Button, ttk
+from typing import List
 
 def place_label_frame(window: Misc, text: str, width: int, height: int, x: int, y: int, fg: str = "black") -> LabelFrame:
     label_frame = LabelFrame(
@@ -24,3 +24,13 @@ def place_button(window: Misc, text: str, fg: str, command, x: int, y: int) -> B
     button = Button(window, text=text, fg=fg, command=command)
     button.place(x=x, y=y)
     return button
+
+
+def catalog_view(panel: Misc, columns: List[str], columns_size: List[int], x: int = 0, y: int = 0):
+    tree = ttk.Treeview(panel, selectmode="browse",
+                        columns=columns, show="headings")
+    for i in range(len(columns)):
+        tree.column(columns[i], width=columns_size[i], anchor="center")
+        tree.heading(columns[i], text=columns[i])
+    tree.place(x=x, y=y)
+    return tree
