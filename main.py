@@ -3,6 +3,7 @@ from tkinter import messagebox
 import function
 import menu
 
+global id
 
 def reset_sign_in():  # reset function of Sign In
     txt_fname.delete(0, END)
@@ -21,23 +22,28 @@ def sign_up():  # sign up function
     if txt_uppw.get() == txt_rpw.get():
         messagebox.showinfo(
             title="Sucess", message="Your account has been created!")
-        save = txt_fname.get() + txt_lname.get() + ";" + txt_email.get() + \
-            ";" + txt_uppw.get() + ";" + "user" + "\n"
+        with open("database/users.csv", "r", encoding="UTF-8") as f:
+            cont_line=f.readlines()
+        save = str(len(cont_line)) + ";" + txt_fname.get() + txt_lname.get() + ";" + txt_email.get() + \
+            ";" + txt_uppw.get() + ";" + "user" + ";" + "--:--:--" + ";" + "False" + ";" + "False" + \
+            ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"
         with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
-        reset_sign_up()
+        reset_sign_in()
     else:
         messagebox.showerror(
             title="Warning!", message="The passwords must be the same!")
 
 
 def sign_in():  # sign in function
+    global id
     sucess = False
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             words = line.split(";")
-            if txt_user.get() == words[1] and txt_pw.get() == words[2]:
+            if txt_user.get() == words[2] and txt_pw.get() == words[3]:
                 sucess = True
+                id = words[0]
                 window.withdraw()
                 menu.menu()
         if sucess == False:
@@ -49,8 +55,12 @@ def sign_in():  # sign in function
 window = Tk()  # Main Window
 window.geometry("1000x800")
 window.state("zoomed")
+window.minsize(width=1920 ,height=1080)
+window.maxsize(width=1920 ,height=1080)
 window.title("MOVIETIME")
+window.iconbitmap("popcorn_icon.ico")
 
+id = 0
 # region Sign in
 frame1 = function.place_label_frame(
     window, text="Sign In", width=350, height=200, x=470, y=450)
