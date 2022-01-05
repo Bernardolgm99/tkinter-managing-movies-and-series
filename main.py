@@ -3,7 +3,7 @@ from tkinter import messagebox
 import function
 import menu
 
-global id
+global user_id
 
 def reset_sign_in():  # reset function of Sign In
     txt_fname.delete(0, END)
@@ -24,8 +24,8 @@ def sign_up():  # sign up function
             title="Sucess", message="Your account has been created!")
         with open("database/users.csv", "r", encoding="UTF-8") as f:
             cont_line=f.readlines()
-        save = str(len(cont_line)) + ";" + txt_fname.get() + txt_lname.get() + ";" + txt_email.get() + \
-            ";" + txt_uppw.get() + ";" + "user" + ";" + "--:--:--" + ";" + "False" + ";" + "False" + \
+        save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
+            ";" + txt_uppw.get() + ";" + "user" + ";" + "0000/00/00 --:--" + ";" + "False" + ";" + "False" + \
             ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"
         with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
@@ -36,16 +36,16 @@ def sign_up():  # sign up function
 
 
 def sign_in():  # sign in function
-    global id
+    global user_id
     sucess = False
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             words = line.split(";")
-            if txt_user.get() == words[2] and txt_pw.get() == words[3]:
+            if txt_user.get() == words[3] and txt_pw.get() == words[4]:
                 sucess = True
-                id = words[0]
-                window.withdraw()
-                menu.menu()
+                user_id = words[0]
+                window.destroy()
+                menu.menu(user_id)
         if sucess == False:
             messagebox.showerror(
                 title="Warning!", message="The password or email doesn't exist or are incorrect!")
@@ -53,17 +53,15 @@ def sign_in():  # sign in function
 
 
 window = Tk()  # Main Window
-window.geometry("1000x800")
-window.state("zoomed")
-window.minsize(width=1920 ,height=1080)
-window.maxsize(width=1920 ,height=1080)
+window.minsize(width=1000 ,height=650)
+window.maxsize(width=1000 ,height=650)
 window.title("MOVIETIME")
 window.iconbitmap("popcorn_icon.ico")
 
-id = 0
+user_id = 0
 # region Sign in
 frame1 = function.place_label_frame(
-    window, text="Sign In", width=350, height=200, x=470, y=450)
+window, text="Sign In", width=350, height=200, x=470, y=450)
 
 lbl_user = function.place_label(window, "Email:", 500, 500)
 txt_user = function.place_entry(window, 30, 560, 500)
