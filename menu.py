@@ -1,11 +1,11 @@
-from tkinter import *  # type: ignore
-from tkinter import messagebox
-from tkinter import ttk
-import tkinter as tk
-from PIL import Image, ImageTk
-from tkinter import filedialog
-import function
 import datetime
+from tkinter import Label, Menu, Misc, PanedWindow, filedialog, messagebox, ttk
+from tkinter.constants import SUNKEN, TOP
+from typing import Optional
+
+from PIL import Image, ImageTk
+
+import function
 import menu_admin
 
 
@@ -30,6 +30,7 @@ def new_pw(user_id, txt_new_pw: str, txt_new_repw: str):
     if txt_new_repw == txt_new_pw:
         with open("database/users.csv", "r", encoding="UTF-8") as f:
             new_text = ""
+            var_user = ""
             for line in f:
                 user = line.split(";")
                 if user_id == user[0]:
@@ -51,7 +52,7 @@ def new_pw(user_id, txt_new_pw: str, txt_new_repw: str):
 
 def perfil(user_id):
     perfil_window = function.toplevel_window("Perfil", "600x800")
-
+    find_user = False
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             user_line = line.split(";")
@@ -62,14 +63,16 @@ def perfil(user_id):
                 last_name = user_line[2]
                 # writes a label on the perfil saying the users email
                 email = user_line[3]
-                global img_1
                 img = Image.open(user_line[6])
                 resized_img_1 = img.resize((200,200), Image.ANTIALIAS)
                 img_1 = ImageTk.PhotoImage(resized_img_1)
                 label = Label(perfil_window, image=img_1, bd=5, relief=SUNKEN)
                 label.pack(padx=2, pady=2, side=TOP)
-
-
+                break
+        else:
+            # else do 'for' só será executado se não ativar o 'break'
+            return None
+    
     lbl_fname = function.place_label(
         perfil_window, "First Name: ", 100, 250, "grey")
     lbl_lname = function.place_label(
