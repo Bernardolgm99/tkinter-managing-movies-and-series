@@ -1,5 +1,6 @@
-from tkinter import LabelFrame, Misc, Entry, Label, Button, ttk, Tk, PanedWindow
+from tkinter import LabelFrame, Misc, Entry, Label, Button, Toplevel, ttk, Tk, PanedWindow
 from typing import List
+
 
 def place_label_frame(window: Misc, text: str, width: int, height: int, x: int, y: int, fg: str = "black") -> LabelFrame:
     label_frame = LabelFrame(
@@ -36,9 +37,22 @@ def catalog_view(panel: Misc, columns: List[str], columns_size: List[int], x: in
     return tree
 
 
-def tk_window(geometry: str, title: str, fullscreen: str = "") -> Tk:
+def tk_window(title: str, geometry: str = "1000x650",  min_size: List[int] = [0, 0], max_size: List[int] = [0, 0], fullscreen: str = "normal") -> Tk:
     window = Tk()
     window.geometry(geometry)
+    window.minsize(width=min_size[0], height=min_size[1])
+    window.maxsize(width=max_size[0], height=max_size[1])
+    window.state(fullscreen)
+    window.title(title)
+    window.iconbitmap("popcorn_icon.ico")
+    return window
+
+
+def toplevel_window(title: str, geometry: str = "1000x650",  min_size: List[int] = [0, 0], max_size: List[int] = [0, 0], fullscreen: str = "normal") -> Toplevel:
+    window = Toplevel()
+    window.geometry(geometry)
+    window.minsize(width=min_size[0], height=min_size[1])
+    window.maxsize(width=max_size[0], height=max_size[1])
     window.state(fullscreen)
     window.title(title)
     window.iconbitmap("popcorn_icon.ico")
@@ -46,6 +60,6 @@ def tk_window(geometry: str, title: str, fullscreen: str = "") -> Tk:
 
 
 def panel_window(window: Misc, width: int, height: int, x: int, y: int):
-    panel = PanedWindow(window, width = width, height = height, bd = "3", relief = "sunken")
-    panel.place(x=x,y=y)
+    panel = PanedWindow(window, width=width, height=height, bd="3", relief="sunken")
+    panel.place(x=x, y=y)
     return panel

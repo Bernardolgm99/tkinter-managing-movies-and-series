@@ -15,17 +15,13 @@ def image():
 
 
 def perfil(user_id):
-    perfil_window = Toplevel()
-    perfil_window.geometry("600x800")
-    perfil_window.title("Perfil")
-    perfil_window.iconbitmap("popcorn_icon.ico")
+    perfil_window = function.toplevel_window("Perfil", "600x800")
+    global img_1
+    img_1 = PhotoImage(name="user", file="user.png")
+    label = Label(perfil_window, image=img_1, bd=5, relief=SUNKEN)
+    label.pack(padx=10, pady=10, side=RIGHT)
 
-    perfil_window = Canvas(perfil_window, width=450, height=450)
-    perfil_window.pack()
-    img = PhotoImage(file="user.png")
-    perfil_window.create_image(0, 0, anchor=NW, image=img)
-
-    with open("users.csv", "r", encoding="UTF-8") as f:
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             user_line = line.split(";")
             if user_id == user_line[0]:
@@ -37,16 +33,17 @@ def perfil(user_id):
                 email = user_line[3]
 
     lbl_fname = function.place_label(
-        perfil_window, "First Name: ", 10, 10, "grey")
+        perfil_window, "First Name: ", 100, 100, "grey")
     lbl_lname = function.place_label(
-        perfil_window, "Last Name: ", 20, 20, "grey")
-    lbl_email = function.place_label(perfil_window, "Email:", 30, 30, "grey")
+        perfil_window, "Last Name: ", 200, 200, "grey")
+    lbl_email = function.place_label(perfil_window, "Email:", 300, 300, "grey")
 
     btn_avatar = function.place_button(
-        perfil_window, "New Profile Pic", "blue", image, 0, 0)
-
+        perfil_window, "New Profile Pic", "blue", image, 400, 400)
 
 # writes on the "users.csv" the last time the user was online (Time/Date)LL
+
+
 def last_session(user_id):
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         new_text = ""
@@ -65,28 +62,22 @@ def last_session(user_id):
 
 
 def menu(user_id):  # menu
-    new_window = Tk()
-    new_window.minsize(width=1000, height=650)
-    new_window.maxsize(width=1000, height=650)
-    new_window.title("MOVIETIME")
-    new_window.iconbitmap("popcorn_icon.ico")
+    window_menu = function.tk_window(
+        "MOVIETIME", "1000x650", [1000, 650], [1000, 650])
 
-    Menu_bar = Menu(new_window)
+    Menu_bar = Menu(window_menu)
 
     Menu_bar.add_command(label="User Perfil", command=lambda: perfil(user_id))
 
-    new_window.configure(menu=Menu_bar)
+    window_menu.configure(menu=Menu_bar)
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             words = line.split(";")
             if words[5] == "admin" and user_id == words[0]:
-                Menu_bar.add_command(label="Admin Configs",
-                                     command=menu_admin.admin_menu)
+                Menu_bar.add_command(label="Admin Configs", command=menu_admin.admin_menu)
 
     Menu_bar.add_command(label="Quit", command=lambda: last_session(user_id))
 
-    panel = PanedWindow(new_window, width=450, height=270,
-                        bd="3", relief="sunken")
+    panel = PanedWindow(window_menu, width=450, height=270, bd="3", relief="sunken")
     panel.place(x=0, y=0)
-    tree = function.catalog_view(
-        panel, ("Nome", "Email", "Senha", "Tipo"), (100, 100, 100, 150))  # type: ignore
+    tree = function.catalog_view(panel, ("Nome", "Email", "Senha", "Tipo"), (100, 100, 100, 150))  # type: ignore
