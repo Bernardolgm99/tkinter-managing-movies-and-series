@@ -1,5 +1,23 @@
-from tkinter import LabelFrame, Misc, Entry, Label, Button, Toplevel, ttk, Tk, PanedWindow
+from pathlib import Path
+from tkinter import LabelFrame, Misc, Entry, Label, Button, Toplevel, ttk, Tk, PanedWindow, Text
+from PIL import Image, ImageTk
 from typing import List
+from tkinter import *
+
+#Não está sendo reconhecido o open do Image
+def place_img(window: Misc, img: Path, side):
+    img_movie = Image.open(img)
+    resized = img_movie.resize((338,500), Image.ANTIALIAS)
+    img_movie_resized = ImageTk.PhotoImage(resized)
+    label_img_movie = Label(window, image=img_movie_resized, bd=5, relief=SUNKEN)
+    label_img_movie.pack(padx=10, pady=10, side=side)
+    return label_img_movie
+
+
+def place_text(window: Misc, width: int, height: int, x: int, y: int, fg: str = "black", font: str = "Verdana"):
+    txt = Text(window, width=width, height=height, fg=fg, font=font, wrap="word",relief="flat")
+    txt.place(x=x,y=y)
+    return txt
 
 
 def place_label_frame(window: Misc, text: str, width: int, height: int, x: int, y: int, fg: str = "black") -> LabelFrame:
@@ -9,8 +27,8 @@ def place_label_frame(window: Misc, text: str, width: int, height: int, x: int, 
     return label_frame
 
 
-def place_label(window: Misc, text: str, x: int, y: int, fg: str = "black") -> Label:
-    label = Label(window, text=text, fg=fg)
+def place_label(window: Misc, text: str, x: int, y: int, fg: str = "black", font: str = "Verdana") -> Label:
+    label = Label(window, text=text, fg=fg, font=font)
     label.place(x=x, y=y)
     return label
 
