@@ -25,7 +25,7 @@ def sign_up():  # sign up function
         with open("database/users.csv", "r", encoding="UTF-8") as f:
             cont_line = f.readlines()
         save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
-            ";" + txt_uppw.get() + ";" + "user" + ";" + "0000/00/00 --:--" + ";" + "False" + ";" + "False" + \
+            ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "False" + ";" + "False" + \
             ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"
         with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
