@@ -1,4 +1,4 @@
-Id;First Name;Last Name;Email;Password;Role;Last Acess;Romance;Comedy;Action;Adventure;Drama;Horror
-1;admin;admin;admin;admin;admin;2022/01/05 18:05;False;False;False;False;False;False
-2;grupo7;grupo7;grupo7@grupo7.com;grupo7;admin;0000/00/00 00:00;False;False;False;False;False;False
-3;11;11;12;12;user;202201051816;False;False;False;False;False;False
+Id;First Name;Last Name;Email;Password;Role;Perfil Image;Last Acess;Romance;Comedy;Action;Adventure;Drama;Horror
+1;admin;admin;admin;admin;admin;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/pika.png;2022/01/05 18:05;False;False;False;False;False;False
+2;grupo7;grupo7;grupo7@grupo7.com;grupo7;admin;images/user.png;0000/00/00 00:00;False;False;False;False;False;False
+3;11;11;12;12;user;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/gy5e5vroo0u71.jpg;202201071104;False;False;False;False;False;False
