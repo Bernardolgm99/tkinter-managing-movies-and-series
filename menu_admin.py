@@ -1,5 +1,6 @@
-from tkinter import *  # type:ignore
-from tkinter import messagebox, ttk
+from tkinter import Entry, Misc, messagebox, ttk
+from tkinter.constants import END
+
 import function
 
 
@@ -50,7 +51,6 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, r
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
     window_admin.destroy()
     admin_menu()
-
 
 def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc):       # remove movies/series function
     selected_to_remove = catalog_movie_admin.focus()

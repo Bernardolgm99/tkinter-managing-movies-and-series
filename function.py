@@ -1,17 +1,15 @@
-from pathlib import Path
-from tkinter import LabelFrame, Misc, Entry, Label, Button, Toplevel, ttk, Tk, PanedWindow, Text
-from PIL import Image, ImageTk
+from tkinter import (Button, Entry, Label, LabelFrame, Misc, PanedWindow, Text, Tk, Toplevel, ttk)
+from tkinter.constants import SUNKEN
 from typing import List
-from tkinter import *
 
-#Não está sendo reconhecido o open do Image
-def place_img(window: Misc, img: Path, side):
+from PIL import Image, ImageTk
+
+
+def place_img(window: Misc, img: str) -> ImageTk.PhotoImage:
     img_movie = Image.open(img)
     resized = img_movie.resize((338,500), Image.ANTIALIAS)
-    img_movie_resized = ImageTk.PhotoImage(resized)
-    label_img_movie = Label(window, image=img_movie_resized, bd=5, relief=SUNKEN)
-    label_img_movie.pack(padx=10, pady=10, side=side)
-    return label_img_movie
+    img_movie_resized = ImageTk.PhotoImage(resized, master=window)
+    return img_movie_resized
 
 
 def place_text(window: Misc, width: int, height: int, x: int, y: int, fg: str = "black", font: str = "Verdana"):
@@ -27,8 +25,8 @@ def place_label_frame(window: Misc, text: str, width: int, height: int, x: int, 
     return label_frame
 
 
-def place_label(window: Misc, text: str, x: int, y: int, fg: str = "black", font: str = "Verdana") -> Label:
-    label = Label(window, text=text, fg=fg, font=font)
+def place_label(window: Misc, text: str, x: int, y: int, fg: str = "black", font: str = None) -> Label:
+    label = Label(window, text=text, fg=fg) if (font is None) else Label(window, text=text, fg=fg, font=font)
     label.place(x=x, y=y)
     return label
 

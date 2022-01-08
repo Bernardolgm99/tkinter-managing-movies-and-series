@@ -1,5 +1,6 @@
-from tkinter import *  # type: ignore
 from tkinter import messagebox
+from tkinter.constants import END
+
 import function
 import menu
 
