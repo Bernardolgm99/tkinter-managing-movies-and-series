@@ -1,6 +1,5 @@
+from tkinter import *  # type: ignore
 from tkinter import messagebox
-from tkinter.constants import END
-
 import function
 import menu
 
@@ -22,33 +21,33 @@ def reset_sign_up():  # reset function of Sign Up
 
 def sign_up():  # sign up function
     if txt_uppw.get() == txt_rpw.get():
-        messagebox.showinfo(title="Sucess", message="Your account has been created!")
-        with open("database/users.csv", "r", encoding="UTF-8") as f:
+        messagebox.showinfo(title="Sucess", message="Your account has been created!")       # success pop-up
+        with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
             cont_line = f.readlines()
         save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
             ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "False" + ";" + "False" + \
-            ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"
+            ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"        # variable that has the whole default information of the user 
         with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
         reset_sign_in()
     else:
-        messagebox.showerror(title="Warning!", message="The passwords must be the same!")
+        messagebox.showerror(title="Warning!", message="The passwords must be the same!")       # warning pop-up
 
 
 def sign_in():  # sign in function
     global user_id
     sucess = False
-    with open("database/users.csv", "r", encoding="UTF-8") as f:
+    with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
         for line in f:
             words = line.split(";")
-            if txt_user.get() == words[3] and txt_pw.get() == words[4]:
+            if txt_user.get() == words[3] and txt_pw.get() == words[4]:     # condition that confirms if the passwords are the same
                 sucess = True
                 user_id = words[0]
                 window.destroy()
                 menu.menu(user_id)
                 break
         if sucess == False:
-            messagebox.showerror(title="Warning!", message="The password or email doesn't exist or are incorrect!")
+            messagebox.showerror(title="Warning!", message="The password or email doesn't exist or are incorrect!")     # error pop-up
             reset_sign_in()
 
 
