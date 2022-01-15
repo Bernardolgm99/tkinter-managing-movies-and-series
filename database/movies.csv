@@ -1,7 +1,8 @@
-Movies;Picture;Genres;Director;Rating;Synopsis
-Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;8.8;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.
-Hulk;"images/hulk.png";Action;Bernardo;8.6;oi
-Bernardo e os 7 anões;filme;Romance;Pão e Bea;10;oi
-3 porquinhos;animation;eu;25;hccgvjbuiuyfvtyc
-
-
+Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space
+1;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;8.8;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;000000000000; 
+2;Hulk;"images/hulk.png";Action;Bernardo;8.6;oi;000000000000;
+3;Bernardo e os 7 anões;filme;Romance;Pão e Bea;10;oi;000000000000;
+4;3 porquinhos;animation;eu;25;hccgvjbuiuyfvtyc; ;000000000000;
+5;12; ;12;ola;12; ;202201141114; 
+6;jhv; ;jhv;vuy;yv; ;202201141115; 
+7;sdofn; ;osdingoi;ddeoign;10; ;202201141118; 
