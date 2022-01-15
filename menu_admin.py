@@ -2,7 +2,7 @@ from tkinter import Entry, Misc, messagebox, ttk
 from tkinter.constants import END
 
 import function
-
+import datetime
 
 def admin_menu():
     window_admin = function.toplevel_window("MOVIETIME Admin", "950x600")
@@ -13,7 +13,7 @@ def admin_menu():
         for line in f:
             words = line.split(";")
             catalog_movie_admin.insert("", "end", values=(
-                words[0], words[1], words[2], words[3]))        # inserts the whole data in movies.csv by lines
+                words[1], words[3], words[4], words[5]))        # inserts the whole data in movies.csv by lines
 
     panel_option_admin = function.panel_window(window_admin, 900, 200, 20, 300)
 
@@ -44,8 +44,11 @@ def admin_menu():
 
 
 def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, rating: Entry,synopsis: Entry):      # add movies/series function
-    save = movie.get() + ";" + genre.get() + ";" + \
-        director.get() + ";" + rating.get() + synopsis.get() + "\n"
+    calender = datetime.datetime.now()
+    time = datetime.datetime.now().time()
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        cont_line = f.readlines()
+    save = str(len(cont_line)) + ";" + movie.get() + ";" + " " + ";" + genre.get() + ";" + director.get() + ";" + rating.get() + ";" + synopsis.get() + " " +  ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + " " + "\n"
     with open("database/movies.csv", "a", encoding="UTF-8") as f:  # append the new data
         f.write(save)
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
@@ -54,7 +57,7 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, r
 
 def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc):       # remove movies/series function
     selected_to_remove = catalog_movie_admin.focus()
-    selected_to_remove = int(selected_to_remove[1:])
+    selected_to_remove = int(selected_to_remove[1:], 16)
     i = 0
     with open("database/movies.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
         new_text = ""
@@ -78,3 +81,8 @@ def reset_movie(movie: Entry, genre: Entry, director: Entry, rating: Entry, syno
     director.delete(0, END)
     rating.delete(0, END)
     synopsis.delete(0, END)
+
+
+
+
+
