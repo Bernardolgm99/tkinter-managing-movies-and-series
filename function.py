@@ -1,4 +1,4 @@
-from tkinter import (Button, Entry, Label, LabelFrame, Misc, PanedWindow, Text, Tk, Toplevel, ttk)
+from tkinter import (Button, Entry, Label, LabelFrame, Listbox, Misc, PanedWindow, PhotoImage, Text, Tk, Toplevel, ttk)
 from tkinter.constants import SUNKEN
 from typing import List
 
@@ -42,6 +42,11 @@ def place_button(window: Misc, text: str, fg: str, command, x: int, y: int) -> B
     button.place(x=x, y=y)
     return button
 
+def button_img(window: Misc, image: ImageTk.PhotoImage, command, width: int, height: int, x: int, y: int) -> Button:
+    button = Button(window, image=image, command=command, width = width, height = height)
+    button.place(x=x, y=y)
+    return button
+
 
 def catalog_view(panel: Misc, columns: List[str], columns_size: List[int], x: int = 0, y: int = 0):
     tree = ttk.Treeview(panel, selectmode="browse",
@@ -79,3 +84,8 @@ def panel_window(window: Misc, width: int, height: int, x: int, y: int):
     panel = PanedWindow(window, width=width, height=height, bd="3", relief="sunken")
     panel.place(x=x, y=y)
     return panel
+
+def listbox_panel(window: Misc, width: int, height: int, x: int, y: int) -> Listbox:
+    listbox = Listbox(window, width = width, height = height)
+    listbox.place (x=x,y=y)
+    return listbox
