@@ -1,6 +1,7 @@
 from logging import info
-from tkinter import Button, Menu, mainloop, messagebox, ttk, filedialog
+from tkinter import Button, Label, Menu, Menubutton, Misc, mainloop, messagebox, ttk, filedialog
 import tkinter as tk
+from turtle import write_docstringdict
 from PIL import Image, ImageTk
 import function
 import datetime
@@ -32,37 +33,41 @@ def last_session(user_id):          # last session registration function
         f.write(new_text)
     exit()      # close the whole program
 
-def notifications(window_menu: Misc, user_id, Menu_bar: Menu, note_movie: list):
+def notifications(user_id, Menu_bar: Menu, note_movie: list, cont):       # notifications function
     note_window = function.tk_window("NOTIFICATIONS", "400x300", [400, 300], [400, 300])
-    
-    # write code to show up new movies
 
     x = 10
-    y = 20
+    y = 20 
     x_flbl = 5
     y_flbl = 10
-    for i in range (len(note_movie)):
-        frame_lbl_noti = function.place_label_frame(note_window,"", 350, 40, x_flbl, y_flbl)
-        lbl_noti = function.place_label(note_window, ("• The movie {0} was added.".format(note_movie[i])), x, y)
-        y+=40
-        y_flbl+=40
 
-    with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
-        new_text = ""
-        for line in f:
-            user = line.split(";")
-            if user_id == user[0]:
-                calender = datetime.datetime.now()
-                time = datetime.datetime.now().time()
-                user[7] = calender.strftime("%Y%m%d") + time.strftime("%H%M")       # change the data to the year/month/day + hour/minute at the moment
-                new_text = new_text + ";".join(user)
-            else:
-                new_text = new_text + line
-    with open("database/users.csv", "w", encoding="UTF-8") as f:      # re-write the data
-        f.write(new_text)
-    Menu_bar.entryconfig(3, label = "Notifications")
+    if cont == 0:
+        frame_lbl_noti = function.place_label_frame(note_window,"", 350, 40, 5, 10)
+        lbl_noti = function.place_label(note_window,"• 0 movies were added since your last session, come back later!", 10, 20)
+    else:
+        # write code to show up new movies
 
-    #btn_quit = function.place_button(note_window, "Quit", "black", note_window.destroy, 240, 290)
+        for i in range (len(note_movie)):       # will show the movies that were added since the last time the user was online
+            frame_lbl_noti = function.place_label_frame(note_window,"", 350, 40, x_flbl, y_flbl)        # places a label frame
+            lbl_noti = function.place_label(note_window, ("• The movie {0} was added.".format(note_movie[i])), x, y)
+            y+=40
+            y_flbl+=40
+
+        with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
+            new_text = ""
+            for line in f:
+                user = line.split(";")
+                if user_id == user[0]:
+                    calender = datetime.datetime.now()
+                    time = datetime.datetime.now().time()
+                    user[7] = calender.strftime("%Y%m%d") + time.strftime("%H%M")       # change the data to the year/month/day + hour/minute at the moment
+                    new_text = new_text + ";".join(user)
+                else:
+                    new_text = new_text + line
+        with open("database/users.csv", "w", encoding="UTF-8") as f:      # re-write the data
+            f.write(new_text)
+
+        #btn_quit = function.place_button(note_window, "Quit", "black", note_window.destroy, 240, 290)
        
 
 def menu(user_id):  # menu function
@@ -77,14 +82,28 @@ def menu(user_id):  # menu function
 
     # top level bar for exclusive use by the admin/admins
     window_menu.configure(menu=Menu_bar)
-    # open the file to read and to compare the user id with the data
-    with open("database/users.csv", "r", encoding="UTF-8") as f:
+
+    with open("database/users.csv", "r", encoding="UTF-8") as f:        # open the file to read and to compare the user id with the data
         for line in f:
-            words = line.split(";")
-            # if the condition it's true, goes to the admin configure window of the main page
-            if words[5] == "admin" and user_id == words[0]:
+            words = line.split(";") 
+            if user_id == words[0]:
+                user_last_session = words[7]
+            if words[5] == "admin" and user_id == words[0]:     # if the condition it's true, goes to the admin configure window of the main page
                 Menu_bar.add_command(label="Admin Configs",
                                      command=menu_admin.admin_menu)
+            
+    cont = 0
+    note_movie = []
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:       # open the file to read the movies data
+        for line in f:
+            movies = line.split(";")
+            if user_last_session < movies[7]:   # analyzes if the movie publishment date is greater than the date of the last user activity
+                note_movie.append(movies[1])
+                cont+=1
+    if cont == 0:
+        Menu_bar.add_command(label="Notifications", command=lambda: notifications(user_id, Menu_bar, note_movie, cont))
+    else:
+        Menu_bar.add_command(label="Notifications  {0}".format(cont), command=lambda: notifications(user_id, Menu_bar, note_movie, cont))
 
     Menu_bar.add_command(label="Quit", command=lambda: last_session(
         user_id))       # top level bar option
