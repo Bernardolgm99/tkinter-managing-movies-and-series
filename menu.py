@@ -1,3 +1,5 @@
+from cProfile import label
+from distutils import command
 from tkinter import *  # type: ignore
 from tkinter import messagebox
 from tkinter import ttk
@@ -7,6 +9,7 @@ from tkinter import filedialog
 import function
 import datetime
 import menu_admin
+from tkinter import font
 
 
 def image(perfil_window:Misc, user_id):             # perfil image selection function
@@ -119,6 +122,38 @@ def last_session(user_id):          # last session registration function
         f.write(new_text)
     exit()      # close the whole program
 
+def notifications(window_menu: Misc, user_id, Menu_bar: Menu, note_movie: list):
+    note_window = function.tk_window("NOTIFICATIONS", "400x300", [400, 300], [400, 300])
+    
+    # write code to show up new movies
+
+    x = 10
+    y = 20
+    x_flbl = 5
+    y_flbl = 10
+    for i in range (len(note_movie)):
+        frame_lbl_noti = function.place_label_frame(note_window,"", 350, 40, x_flbl, y_flbl)
+        lbl_noti = function.place_label(note_window, ("• The movie {0} was added.".format(note_movie[i])), x, y)
+        y+=40
+        y_flbl+=40
+
+    with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
+        new_text = ""
+        for line in f:
+            user = line.split(";")
+            if user_id == user[0]:
+                calender = datetime.datetime.now()
+                time = datetime.datetime.now().time()
+                user[7] = calender.strftime("%Y%m%d") + time.strftime("%H%M")       # change the data to the year/month/day + hour/minute at the moment
+                new_text = new_text + ";".join(user)
+            else:
+                new_text = new_text + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:      # re-write the data
+        f.write(new_text)
+    Menu_bar.entryconfig(3, label = "Notifications")
+
+    #btn_quit = function.place_button(note_window, "Quit", "black", note_window.destroy, 240, 290)
+       
 
 def menu(user_id):  # menu function
     window_menu = function.tk_window(
@@ -135,10 +170,30 @@ def menu(user_id):  # menu function
             if words[5] == "admin" and user_id == words[0]:         # if the condition it's true, goes to the admin configure window of the main page
                 Menu_bar.add_command(label="Admin Configs", command=menu_admin.admin_menu)
 
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            user = line.split(";")
+            if user_id == user[0]:
+                user_last_session = user[7]     # picks the last time the user was on the app
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        note_movie = []
+        cont = 0
+        for line in f:
+            movie_add = line.split(";")
+            if user_last_session < movie_add[6]:    # compares if the time the movie was added is greater than the time the user was last time online
+               cont+=1
+               note_movie.append(movie_add[1])
+    
+    Menu_bar.add_command(label="Notifications " + str(cont), command=lambda: notifications(window_menu, user_id, Menu_bar, note_movie))
+
     Menu_bar.add_command(label="Quit", command=lambda: last_session(user_id))       # top level bar option 
 
-    panel = PanedWindow(window_menu, width=450, height=270, bd="3", relief="sunken")        #main page panel displaying all the movies, series, etc.
-    panel.place(x=0, y=0)
-    tree = function.catalog_view(panel, ("Nome", "Email", "Senha", "Tipo"), (100, 100, 100, 150))  # type: ignore
+    panel_calog_movie_admin = function.panel_window(window_menu, 900, 231, 20, 20)
+    catalog_movie_admin = function.catalog_view(panel_calog_movie_admin, ["Movie", "Genres", "Director", "Rating"], [200, 242, 200, 250])   # panel that shows the existent movies/series
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
+        for line in f:
+            words = line.split(";")
+            catalog_movie_admin.insert("", "end", values=(
+                words[1], words[3], words[4], words[5]))        # inserts the whole data in movies.csv by lines
 
     window_menu.mainloop()
