@@ -1,7 +1,12 @@
+from ast import List
 from logging import info
-from tkinter import Button, Label, Menu, Menubutton, Misc, mainloop, messagebox, ttk, filedialog
+from msilib.schema import ListBox
+from pydoc import text
+from textwrap import fill, wrap
+from tkinter import ANCHOR, END, VERTICAL, Button, Frame, Label, LabelFrame, Listbox, Menu, Menubutton, Misc, Scrollbar, mainloop, messagebox, ttk, filedialog
 import tkinter as tk
-from turtle import write_docstringdict
+from turtle import width, write_docstringdict
+from unittest import result
 from PIL import Image, ImageTk
 import function
 import datetime
@@ -68,7 +73,16 @@ def notifications(user_id, Menu_bar: Menu, note_movie: list, cont):       # noti
             f.write(new_text)
 
         #btn_quit = function.place_button(note_window, "Quit", "black", note_window.destroy, 240, 290)
-       
+
+def select(btn, listbox_gender_option: Listbox):  
+    gender = []
+    gname = listbox_gender_option.curselection()
+    for i in gname:
+        op = listbox_gender_option.get(i)
+        gender.append(op)
+    for i in range (len(btn)):
+        btn[i].destroy()
+
 
 def menu(user_id):  # menu function
     window_menu = function.tk_window("MOVIETIME", "1600x1000", [1000, 650], [
@@ -108,10 +122,31 @@ def menu(user_id):  # menu function
     Menu_bar.add_command(label="Quit", command=lambda: last_session(
         user_id))       # top level bar option
 
-    # main page panel displaying all the movies, series, etc.
+    label_mamado = function.place_label_frame(window_menu, "Gender", 100, 200, 10,10)
+
+    scrollbar = Scrollbar(label_mamado)
+    scrollbar.pack( side = 'right', fill = 'y' )
+
+    listbox_gender_option = Listbox(label_mamado, yscrollcommand = scrollbar.set, selectmode= "multiple")
+
+    listbox_gender_option.pack( side = 'left', fill = 'both' )
+    scrollbar.config( command = listbox_gender_option.yview )
+
     panel_catalog_movie = function.panel_window(
         window_menu, 1200, 830, 250, 20)
-    listbox_gender_option = function.listbox_panel(window_menu, 40, 20, 0, 20)
+    
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        lines = f.readlines()
+    movie_cat_list = []
+    for i in range (1,len(lines)):
+        movie_cat = lines[i].split(";")
+        if movie_cat[3] not in movie_cat_list:
+            movie_cat_list.append(movie_cat[3])
+    for i in range (len(movie_cat_list)):
+        listbox_gender_option.insert(END, movie_cat_list[i])
+
+    btn_filter = function.place_button(window_menu, "Filter", "black", lambda: select(btn, listbox_gender_option), 65, 200)
+    
 
     with open(file_movies, "r", encoding="UTF-8") as f:
         lines = f.readlines()
@@ -129,7 +164,8 @@ def menu(user_id):  # menu function
         id_movie.append(int(info_movie[0]))
         btn.append(function.button_img(panel_catalog_movie, poster[i-1], lambda i=i: interface_movie.movie_interface(
             user_id, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5))))
+
     window_menu.mainloop()
 
 
-menu("2")
+menu("2") 
