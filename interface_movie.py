@@ -14,7 +14,7 @@ def save_comments(entry_comments: Text, id_movie: int, id_user: int):
     user = []
     for i in range(1, len(lines)):
         user = lines[i].split(";")
-        if int(user[0]) == id_user:
+        if user[0] == id_user:
             break
     with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
         lines = f.readlines()
@@ -25,7 +25,7 @@ def save_comments(entry_comments: Text, id_movie: int, id_user: int):
             "%H:%M"), datetime.datetime.now().strftime("%d/%m/%Y"), user[1], entry_comments.get("1.0", END).rstrip()))
 
 
-def movie_interface(user_id: int, id_movie: int):
+def movie_interface(id_user: int, id_movie: int):
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         movie = []
@@ -56,7 +56,7 @@ def movie_interface(user_id: int, id_movie: int):
     list_entry_comments = function.place_text(window_movie, 80, 10, 1, 150)
 
     btn_entry_comments = function.place_button(window_movie, "Invite comment", "black", lambda: save_comments(
-        list_entry_comments, id_movie, user_id), 1, 1)
+        list_entry_comments, id_movie, id_user), 1, 1)
 
     list_comments = function.place_text(window_movie, 80, 100, 1, 400)
     for i in range(len(lines_comments)):
@@ -65,4 +65,4 @@ def movie_interface(user_id: int, id_movie: int):
     window_movie.mainloop()
 
 
-movie_interface(2, 2)
+#movie_interface(2, 2)
