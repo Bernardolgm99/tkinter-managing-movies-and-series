@@ -85,7 +85,7 @@ def panel_window(window: Misc, width: int, height: int, x: int, y: int):
     panel.place(x=x, y=y)
     return panel
 
-def listbox_panel(window: Misc, width: int, height: int, x: int, y: int) -> Listbox:
-    listbox = Listbox(window, width = width, height = height)
+def listbox_panel(window: Misc, width: int, height: int, x: int, y: int, selectmode: str = "multiple") -> Listbox:
+    listbox = Listbox(window, width = width, height = height, selectmode=selectmode)
     listbox.place (x=x,y=y)
     return listbox
