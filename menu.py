@@ -167,4 +167,3 @@ def menu(user_id):  # menu function
     window_menu.mainloop()
 
 
-menu("2")
