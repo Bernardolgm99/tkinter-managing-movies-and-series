@@ -1,4 +1,5 @@
-from tkinter import Entry, Misc, messagebox, ttk
+from ast import Str
+from tkinter import Button, Entry, Misc, filedialog, messagebox, ttk
 from tkinter.constants import END
 
 import function
@@ -33,8 +34,15 @@ def admin_menu():
     lbl_movie_rating = function.place_label(panel_option_admin, "Synopsis: ", 820, 20)
     movie_synopsis = function.place_entry(panel_option_admin, 20, 820, 40)
 
+    lbl_img_dir = function.place_label(panel_option_admin, "Image directory: ", 100, 140)
+    lbl_movie_dir = function.place_entry(panel_option_admin, 30, 100, 160)
+
+    movie_dir = ""
+    btn_img = function.place_button(panel_option_admin, "Add Image:", "black",lambda: img_catalog(movie_dir, panel_option_admin, lbl_movie_dir), 20, 155)
+
+
     btn = function.place_button(panel_option_admin, "Add", "Blue", lambda: add_movie(
-        window_admin, movie_name, movie_genre, movie_director, movie_rating, movie_synopsis ), 20, 100)     # button to add movies/series to the catalog
+        window_admin, movie_name, movie_genre, movie_director, movie_rating, movie_synopsis, lbl_movie_dir), 20, 100)     # button to add movies/series to the catalog
     btn = function.place_button(panel_option_admin, "Reset", "Red", lambda: reset_movie(
         movie_name, movie_genre, movie_director, movie_rating, movie_synopsis), 60, 100)    #button to reset the whole section of entries 
 
@@ -42,13 +50,18 @@ def admin_menu():
         catalog_movie_admin, window_admin), 100, 100)       # button to remove movies/series from the catalog
     window_admin.mainloop()
 
+def img_catalog(movie_dir: str, panel_option_admin: Misc, lbl_movie_dir: Entry):
+    movie_dir = filedialog.askopenfilename(initialdir="./", title="Select The Catalog Image", parent= panel_option_admin, filetypes=
+                                    (("png files", "*.png"), ("jpg files", "*.jpg"), ("jpeg files", "*.jpeg"), ("tiff files", "*.tiff")))
+    lbl_movie_dir.insert(0, str(movie_dir))
 
-def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, rating: Entry,synopsis: Entry):      # add movies/series function
+
+def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, rating: Entry,synopsis: Entry, lbl_movie_dir: Entry):      # add movies/series function
     calender = datetime.datetime.now()
     time = datetime.datetime.now().time()
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         cont_line = f.readlines()
-    save = str(len(cont_line)) + ";" + movie.get() + ";" + " " + ";" + genre.get() + ";" + director.get() + ";" + rating.get() + ";" + synopsis.get() + " " +  ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + " " + "\n"
+    save = str(len(cont_line)) + ";" + movie.get() + ";" + lbl_movie_dir.get() + ";" + genre.get() + ";" + director.get() + ";" + rating.get() + ";" + synopsis.get() + " " +  ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + " " + "\n"
     with open("database/movies.csv", "a", encoding="UTF-8") as f:  # append the new data
         f.write(save)
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
