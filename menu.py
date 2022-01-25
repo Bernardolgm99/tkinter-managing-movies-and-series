@@ -1,5 +1,6 @@
 from tkinter import END, Button, Frame, Label, LabelFrame, Listbox, Menu, Menubutton, Misc, PanedWindow, Scrollbar, mainloop, messagebox, ttk, filedialog
 import tkinter as tk
+from typing import List
 from PIL import Image, ImageTk
 import function
 import datetime
@@ -35,33 +36,28 @@ def last_session(user_id):          # last session registration function
     exit()      # close the whole program
 
 
-def notifications(user_id, Menu_bar: Menu, note_movie: list, cont):       # notifications function
+def notifications(user_id, Menu_bar: Menu, note_movie: list, cont, movie_genre: list):       # notifications function
     opcoes_menu = Menu(Menu_bar)
     if cont == 1:
         opcoes_menu.add_command(label="Nothing new")
     else:
         # will show the movies that were added since the last time the user was online
-        for i in range(1, len(note_movie)):
-            opcoes_menu.add_command(label="• New movie : %s" % (note_movie[i][1]), command=lambda i=i: interface_movie.movie_interface(user_id, int(note_movie[i][0])))
-    Menu_bar.add_cascade(label="Notification %s" % (cont-1), menu=opcoes_menu)
+        with open("database/users.csv", "r", encoding="UTF-8") as f:
+            for line in f:
+                users = line.split(";")
+                if users[0] == user_id:
+                    x_user = users[8].strip("\n")
+                    if users[8] == "None\n":
+                        for i in range(1, len(note_movie)):   
+                            opcoes_menu.add_command(label="• New movie : %s" % (note_movie[i][1]), command=lambda i=i: interface_movie.movie_interface(user_id, int(note_movie[i][0])))
+                    else:
+                        cont_movie_cat =0     
+                        for i in range(len(movie_genre)):
+                            if x_user == movie_genre[i]:
+                                cont_movie_cat +=1
+                                opcoes_menu.add_command(label="• New movie : %s" % (note_movie[i][1]), command=lambda i=i: interface_movie.movie_interface(user_id, int(note_movie[i][0])))
+    Menu_bar.add_cascade(label="Notification %s" % (cont_movie_cat), menu=opcoes_menu)
 
-    # open the file to read and to compare the user id with the data
-    with open("database/users.csv", "r", encoding="UTF-8") as f:
-        new_text = ""
-        for line in f:
-            user = line.split(";")
-            if user_id == user[0]:
-                calender = datetime.datetime.now()
-                time = datetime.datetime.now().time()
-                # change the data to the year/month/day + hour/minute at the moment
-                user[7] = calender.strftime("%Y%m%d") + time.strftime("%H%M")
-                new_text = new_text + ";".join(user)
-            else:
-                new_text = new_text + line
-    with open("database/users.csv", "w", encoding="UTF-8") as f:      # re-write the data
-        f.write(new_text)
-
-        # btn_quit = function.place_button(note_window, "Quit", "black", note_window.destroy, 240, 290)ck", note_window.destroy, 240, 290)
 
 
 def select(btn, listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
@@ -70,26 +66,10 @@ def select(btn, listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow
     for i in gname:
         op = listbox_gender_option.get(i)
         gender.append(op)
-    with open(file_movies, "r", encoding="UTF-8") as f:
-        lines = f.readlines()
-    panel_catalog_movie = function.panel_window(window_menu, 1200, 830, 250, 20)
+    window_menu.destroy()
+    menu(user_id,gender)
 
-    image_dimentions = [160, 160]
-    btn = []
-    poster = []
-    id_movie = []
-    for i, line in enumerate(lines[1:], start=1):
-        info_movie = line.split(";")
-        btnImage = Image.open(info_movie[2])
-        btnImage = btnImage.resize((image_dimentions[0], image_dimentions[1]), Image.ANTIALIAS)
-        btnImage2 = ImageTk.PhotoImage(btnImage)
-        poster.append(btnImage2)
-        id_movie.append(int(info_movie[0]))
-        if info_movie[3] in gender:
-            function.button_img(panel_catalog_movie, poster[i-1], lambda i=i: interface_movie.movie_interface(user_id, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5)))
-
-    
-def menu(user_id):  # menu function
+def menu(user_id, gender: List = []):  # menu function
     window_menu = function.tk_window("MOVIETIME", "1600x1000", [1000, 650], [1600, 1000])      # Main window
 
     # top level bar with options for use by the user/admin
@@ -113,6 +93,7 @@ def menu(user_id):  # menu function
 
     cont = 0
     note_movie = []
+    movie_genre = []
     # open the file to read the movies data
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         for line in f:
@@ -120,8 +101,11 @@ def menu(user_id):  # menu function
             # analyzes if the movie publishment date is greater than the date of the last user activity
             if user_last_session < movies[7]:
                 note_movie.append([movies[0], movies[1]])
+                movie_genre.append(movies[3])
                 cont += 1
-    notifications(user_id, Menu_bar, note_movie, cont)
+    
+    notifications(user_id, Menu_bar, note_movie, cont, movie_genre)
+
     Menu_bar.add_command(label="Quit", command=lambda: last_session(user_id))       # top level bar option
 
     label_mamado = function.place_label_frame(window_menu, "Gender", 100, 200, 10, 10)
@@ -151,13 +135,21 @@ def menu(user_id):  # menu function
 
     with open(file_movies, "r", encoding="UTF-8") as f:
         lines = f.readlines()
+    movie_list = []
+    if len(gender) != 0:
+        movie_list.append("Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space")
+    for line in lines:
+        movie_info = line.split(";")
+        if (movie_info[3] in gender) or (len(gender) == 0):
+            movie_list.append(line)
+
     image_dimentions = [160, 160]
     btn = []
     poster = []
     id_movie = []
-    for i in range(1, len(lines)):
-        info_movie = lines[i].split(";")
-        btnImage = Image.open(info_movie[2]) if info_movie[2] else Image.new("RGB", (160, 160))
+    for i in range(1, len(movie_list)):
+        info_movie = movie_list[i].split(";")
+        btnImage = Image.open(info_movie[2])
         btnImage = btnImage.resize((image_dimentions[0], image_dimentions[1]), Image.ANTIALIAS)
         btnImage2 = ImageTk.PhotoImage(btnImage)
         poster.append(btnImage2)
@@ -165,3 +157,5 @@ def menu(user_id):  # menu function
         function.button_img(panel_catalog_movie, poster[i-1], lambda i=i: interface_movie.movie_interface(user_id, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5)))
 
     window_menu.mainloop()
+
+menu("2")

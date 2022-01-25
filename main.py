@@ -30,8 +30,7 @@ def sign_up():  # sign up function
         with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
             cont_line = f.readlines()
         save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
-            ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "False" + ";" + "False" + \
-            ";" + "False" + ";" + "False" + ";" + "False" + ";" + "False" + "\n"        # variable that has the whole default information of the user 
+            ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "None" + "\n"        # variable that has the whole default information of the user 
         with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
             f.write(save)
         reset_sign_in()

@@ -1,9 +1,15 @@
+from distutils import command
+from email.encoders import encode_noop
+from msilib.schema import ComboBox
+from multiprocessing import Event
+from optparse import Values
+import tkinter
 from tkinter.tix import IMAGETEXT
+from unicodedata import category
 import function
-
 from PIL import Image, ImageTk
 
-from tkinter import SUNKEN, TOP, Label, Misc, filedialog, messagebox, PhotoImage
+from tkinter import SUNKEN, TOP, Label, Misc, OptionMenu, StringVar, filedialog, messagebox, PhotoImage, ttk
 
 def image(perfil_window:Misc, user_id):             # perfil image selection function
     filename = filedialog.askopenfilename(initialdir="images",title="Select file", parent=perfil_window, filetypes=(
@@ -50,6 +56,21 @@ def new_pw(user_id, txt_new_pw: str, txt_new_repw: str):        # password chang
     else:
         messagebox.showerror(title="Warning!", message="The passwords must be the same!")       # error pop-up 
 
+def category_changed(chosen_cat: StringVar, user_id):
+    messagebox.showinfo(title="Change Result", message="You succesfully changed your favorite category to: {0}".format(chosen_cat.get()))
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        new_text = ""
+        for line in f:
+            users = line.split(";")
+            if users[0] == user_id:
+                users[8] = chosen_cat.get()
+                new_text = new_text + ";".join(users) + "\n"
+            else:
+                new_text = new_text + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:
+        f.write(new_text)
+        
+
 def perfil(user_id):        # user perfil based on his id function
     perfil_window = function.toplevel_window("Perfil", "600x800")
 
@@ -73,6 +94,7 @@ def perfil(user_id):        # user perfil based on his id function
         else:
             return None
 
+    
     #group of labels and entries
     lbl_fname = function.place_label(
         perfil_window, "First Name: ", 100, 250, "grey")
@@ -94,6 +116,29 @@ def perfil(user_id):        # user perfil based on his id function
         perfil_window, 27, 290, 450, "*")
     txt_new_repw = function.place_entry(
         perfil_window, 27, 235, 500, "*")
+
+    #Combobox
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        category_list = []
+        for line in f:
+            movies = line.split(";")
+            if movies[3] != "Genres":
+                if movies[3] not in category_list:
+                    category_list.append(movies[3])
+    
+    lbl_choose_cat = function.place_label(perfil_window, "Choose your favorite category: ", 130, 600, "grey")
+
+    chosen_cat = tkinter.StringVar()
+    cb_categories = ttk.Combobox(perfil_window, values = category_list, textvariable=chosen_cat)
+    cb_categories.place(x=300, y=600)
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            users = line.split(";")
+            if users[0] == user_id:
+                if users[8] != "None\n":
+                    cb_categories.set(users[8])
+
+    btn_cb_categories = function.place_button(perfil_window, "Confirm Change", "red", lambda: category_changed(chosen_cat, user_id), 300, 700)
 
     btn_avatar = function.place_button(         
         perfil_window, "New Profile Pic", "blue", lambda:image (perfil_window, user_id), 20, 20)    #button to change the profile picture 

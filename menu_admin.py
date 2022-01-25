@@ -1,4 +1,5 @@
 from ast import Str
+from itertools import count
 from tkinter import Button, Entry, Misc, filedialog, messagebox, ttk
 from tkinter.constants import END
 
@@ -64,6 +65,8 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, r
     save = str(len(cont_line)) + ";" + movie.get() + ";" + lbl_movie_dir.get() + ";" + genre.get() + ";" + director.get() + ";" + rating.get() + ";" + synopsis.get() + " " +  ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + " " + "\n"
     with open("database/movies.csv", "a", encoding="UTF-8") as f:  # append the new data
         f.write(save)
+    with open("comments/%s.csv" % (len(cont_line)), "x", encoding="UTF-8") as f:
+        print("file created")
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
     window_admin.destroy()
     admin_menu()
