@@ -157,5 +157,3 @@ def menu(user_id, gender: List = []):  # menu function
         function.button_img(panel_catalog_movie, poster[i-1], lambda i=i: interface_movie.movie_interface(user_id, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5)))
 
     window_menu.mainloop()
-
-menu("2")

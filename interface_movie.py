@@ -1,4 +1,6 @@
-from tkinter import Label, Text
+from email.encoders import encode_noop
+from site import USER_SITE
+from tkinter import Label, Menu, Misc, Text
 from tkinter.constants import DISABLED, END, LEFT, RIGHT, SUNKEN, TOP
 from tkinter.ttk import Treeview
 import datetime
@@ -24,6 +26,31 @@ def save_comments(entry_comments: Text, id_movie: int, id_user: int):
         f.write("(%s %s) %s : %s\n\n" % (datetime.datetime.now().strftime(
             "%H:%M"), datetime.datetime.now().strftime("%d/%m/%Y"), user[1], entry_comments.get("1.0", END).rstrip()))
 
+def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        new_txt = ""
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                if users[9] == "None\n":
+                    users[9] = movie[1] + "\n"
+                    new_txt = new_txt + ";".join(users)
+                else:
+                    user_fav_strip = users[9].strip("\n")
+                    user_fav = user_fav_strip.split("%") 
+                    user_fav.append(movie[1])
+                    users[9] = "%".join(user_fav) + "\n"
+                    new_txt = new_txt + ";".join(users)
+            else:
+                new_txt = new_txt + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:
+        f.write(new_txt)
+        
+    window_movie.destroy()
+    movie_interface(id_user, id_movie)
+
+def favorite_del(id_user, movie: list, window_movie: Misc):       
+    print     
 
 def movie_interface(id_user: int, id_movie: int):
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
@@ -50,6 +77,16 @@ def movie_interface(id_user: int, id_movie: int):
     synopsis_movie.insert(END, movie[6])
     synopsis_movie.config(state=DISABLED, bg="#f0f0f0")
 
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                users_fav = users[9].split("%")
+                if movie[1] not in users_fav:
+                    btn_favorite_add = function.place_button(window_movie, "Add to Favorite List", "blue", lambda: favorite_add(id_user, movie, window_movie, id_movie), 1200, 100)
+                else:
+                    btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_add(id_user, movie, window_movie), 1200, 100)
+
     with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
         lines_comments = f.readlines()
 
@@ -62,6 +99,7 @@ def movie_interface(id_user: int, id_movie: int):
     for i in range(len(lines_comments)):
         list_comments.insert(END, lines_comments[i])
     list_comments.config(state=DISABLED)
+    
     window_movie.mainloop()
 
 
