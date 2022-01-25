@@ -60,6 +60,8 @@ def catalog_view(panel: Misc, columns: List[str], columns_size: List[int], x: in
     tree.place(x=x, y=y)
     return tree
 
+def disable_event():
+   pass
 
 def tk_window(title: str, geometry: str = "1000x650",  min_size: List[int] = [0, 0], max_size: List[int] = [0, 0], fullscreen: str = "normal") -> Tk:
     window = Tk()
@@ -69,6 +71,7 @@ def tk_window(title: str, geometry: str = "1000x650",  min_size: List[int] = [0,
     window.state(fullscreen)
     window.title(title)
     window.iconbitmap("popcorn_icon.ico")
+    window.protocol("WM_DELETE_WINDOW", disable_event)
     return window
 
 

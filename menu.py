@@ -157,7 +157,7 @@ def menu(user_id):  # menu function
     id_movie = []
     for i in range(1, len(lines)):
         info_movie = lines[i].split(";")
-        btnImage = Image.open(info_movie[2])
+        btnImage = Image.open(info_movie[2]) if info_movie[2] else Image.new("RGB", (160, 160))
         btnImage = btnImage.resize((image_dimentions[0], image_dimentions[1]), Image.ANTIALIAS)
         btnImage2 = ImageTk.PhotoImage(btnImage)
         poster.append(btnImage2)
