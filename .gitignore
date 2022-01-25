@@ -1,0 +1,3 @@
+comments/*.csv
+database/*.csv
+__pycache__/
