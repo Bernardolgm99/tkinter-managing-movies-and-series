@@ -2,6 +2,8 @@ from tkinter import *  # type: ignore
 from tkinter import messagebox
 import function
 import menu
+from PIL import ImageTk
+
 
 
 # file to store functions 
@@ -54,6 +56,7 @@ def sign_in():  # sign in function
 
 
 window = function.tk_window("MOVIETIME", "900x650", [1000, 650], [1000, 650])  # Main Window
+window.configure(background="#E0ECE4")
 
 user_id = 0
 # region Sign in
@@ -65,7 +68,7 @@ txt_user = function.place_entry(frame1, 30, 80, 75)
 lbl_pw = function.place_label(frame1, "Password", 140, 120)
 txt_pw = function.place_entry(frame1, 30, 80, 145, "*")
 
-btn1 = function.place_button(frame1, "Sign In", "blue", sign_in, 120, 200)
+btn1 = function.place_button(frame1, "Sign In", "white", sign_in, 120, 200)
 # endregion
 
 # region Sign Up
@@ -86,12 +89,12 @@ txt_uppw = function.place_entry(frame2, 30, 160, 285, "*")
 lbl_rpw = function.place_label(frame2, "Re-enter your Password", 190, 330)
 txt_rpw = function.place_entry(frame2, 30, 160, 355, "*")
 
-btn2 = function.place_button(frame2, "Sign Up", "blue", sign_up, 200, 400)
+btn2 = function.place_button(frame2, "Sign Up", "white", sign_up, 200, 400)
 # endregion
 
 # region Reset
-reset_btn2 = function.place_button(frame2, "Reset", "red", reset_sign_in, 270, 400)
-reset_btn1 = function.place_button(frame1, "Reset", "red", reset_sign_up, 180, 200)
+reset_btn2 = function.place_button(frame2, "Reset", "black", reset_sign_in, 270, 400)
+reset_btn1 = function.place_button(frame1, "Reset", "black", reset_sign_up, 180, 200)
 # endregion
 
 # window
