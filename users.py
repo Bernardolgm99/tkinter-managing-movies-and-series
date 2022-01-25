@@ -103,9 +103,9 @@ def perfil(user_id):        # user perfil based on his id function
     lbl_email = function.place_label(
         perfil_window, "Email:", 100, 300, "grey")
     lbl_new_pw = function.place_label(
-        perfil_window, "Change your password (Optional): ", 100, 450, "grey")
+        perfil_window, "Change your password (Optional): ", 100, 350, "grey")
     lbl_new_repw = function.place_label(
-        perfil_window, "Re-enter your password: ", 100, 500, "grey")
+        perfil_window, "Re-enter your password: ", 100, 400, "grey")
     txt_fname = function.place_label(
         perfil_window, first_name, 170, 250, "black")
     txt_lname = function.place_label(
@@ -113,9 +113,9 @@ def perfil(user_id):        # user perfil based on his id function
     txt_email = function.place_label(
         perfil_window, email, 150, 300, "black")
     txt_new_pw = function.place_entry(
-        perfil_window, 27, 290, 450, "*")
+        perfil_window, 27, 290, 350, "*")
     txt_new_repw = function.place_entry(
-        perfil_window, 27, 235, 500, "*")
+        perfil_window, 27, 235, 400, "*")
 
     #Combobox
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
@@ -143,6 +143,6 @@ def perfil(user_id):        # user perfil based on his id function
     btn_avatar = function.place_button(         
         perfil_window, "New Profile Pic", "blue", lambda:image (perfil_window, user_id), 20, 20)    #button to change the profile picture 
     btn_new_pw = function.place_button(
-        perfil_window, "Change Password", "red", lambda: new_pw (user_id, txt_new_pw.get(), txt_new_repw.get()), 150, 550)      #button to change the password if the user wants to
+        perfil_window, "Change Password", "red", lambda: new_pw (user_id, txt_new_pw.get(), txt_new_repw.get()), 150, 450)      #button to change the password if the user wants to
     
     perfil_window.mainloop()

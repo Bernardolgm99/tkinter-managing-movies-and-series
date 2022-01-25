@@ -39,6 +39,7 @@ def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
                     user_fav_strip = users[9].strip("\n")
                     user_fav = user_fav_strip.split("%") 
                     user_fav.append(movie[1])
+                    user_fav.sort()
                     users[9] = "%".join(user_fav) + "\n"
                     new_txt = new_txt + ";".join(users)
             else:
@@ -49,8 +50,29 @@ def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
     window_movie.destroy()
     movie_interface(id_user, id_movie)
 
-def favorite_del(id_user, movie: list, window_movie: Misc):       
-    print     
+def favorite_del(id_user, movie: list, window_movie: Misc, id_movie):       
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        new_txt = ""
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                user_fav_strip = users[9].strip("\n")
+                user_fav = user_fav_strip.split("%")
+                user_fav2 = []
+                for movie_not_remove in user_fav:
+                    if movie_not_remove != movie[1]:
+                        user_fav2.append(movie_not_remove) 
+                        user_fav2.sort()
+                users[9] = "%".join(user_fav2) + "\n"
+                new_txt = new_txt + ";".join(users)
+            else:
+                new_txt = new_txt + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:
+        f.write(new_txt)
+
+    window_movie.destroy()
+    movie_interface(id_user, id_movie)
+
 
 def movie_interface(id_user: int, id_movie: int):
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
@@ -81,11 +103,12 @@ def movie_interface(id_user: int, id_movie: int):
         for line in f:
             users = line.split(";")
             if users[0] == id_user:
+                users[9] = users[9].strip("\n")
                 users_fav = users[9].split("%")
                 if movie[1] not in users_fav:
                     btn_favorite_add = function.place_button(window_movie, "Add to Favorite List", "blue", lambda: favorite_add(id_user, movie, window_movie, id_movie), 1200, 100)
                 else:
-                    btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_add(id_user, movie, window_movie), 1200, 100)
+                    btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_del(id_user, movie, window_movie, id_movie), 1200, 100)
 
     with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
         lines_comments = f.readlines()
