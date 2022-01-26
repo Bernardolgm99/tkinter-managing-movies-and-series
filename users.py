@@ -76,6 +76,7 @@ def category_changed(chosen_cat: StringVar, user_id):
 
 def perfil(user_id):        # user perfil based on his id function
     perfil_window = function.toplevel_window("Perfil", "600x800")
+    perfil_window.configure(background="#E0ECE4")
 
     with open("database/users.csv", "r", encoding="UTF-8") as f:        # open the file to read and to compare the user id with the data
         for line in f:

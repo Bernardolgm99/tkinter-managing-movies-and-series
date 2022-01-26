@@ -110,6 +110,8 @@ def select(listbox_gender_option: Listbox, radio_filter: StringVar, panel_catalo
 
 def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     window_menu = function.tk_window("MOVIETIME", "1600x1000", [1000, 650], [1600, 1000])      # Main window
+    window_menu.configure(background="#E0ECE4")
+    
 
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         lines = f.readlines()

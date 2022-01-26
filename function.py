@@ -42,7 +42,6 @@ def place_entry(window: Misc, width: int, x: int, y: int, show: str = "") -> Ent
 def place_button(window: Misc, text: str, fg: str, command, x: int, y: int) -> Button:
     button = Button(window, text=text, fg=fg, command=command, background="#797A7E")
     button.place(x=x, y=y)
-    button.configure
     return button
 
 def button_img(window: Misc, image: ImageTk.PhotoImage, command, width: int, height: int, x: int, y: int) -> Button:

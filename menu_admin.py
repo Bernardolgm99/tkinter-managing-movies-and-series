@@ -10,6 +10,7 @@ import datetime
 
 def admin_menu(render_movies_list):
     window_admin = function.toplevel_window("MOVIETIME Admin", "950x600")
+    window_admin.configure(background="#E0ECE4")
     window_admin.grab_set()
     panel_calog_movie_admin = function.panel_window(window_admin, 900, 231, 20, 20)
     catalog_movie_admin = function.catalog_view(panel_calog_movie_admin, ["Movie", "Genres", "Director", "Rating"], [200, 242, 200, 250])   # panel that shows the existent movies/series
@@ -99,6 +100,7 @@ def reset_movie(movie: Entry, genre: Entry, director: Entry, synopsis: Entry):  
     genre.delete(0, END)
     director.delete(0, END)
     synopsis.delete(0, END)
+
 
 
 
