@@ -122,7 +122,8 @@ def select(listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, use
 
 def menu(user_id, gender: List = []):  # menu function
     window_menu = function.tk_window("MOVIETIME", "1600x1000", [1000, 650], [1600, 1000])      # Main window
-
+    window_menu.configure(background="#E0ECE4")
+    
     global USER_ID
     USER_ID = user_id
     # top level bar with options for use by the user/admin
