@@ -45,6 +45,7 @@ def notifications(user_id, Menu_bar: Menu, note_movie: list, cont, movie_genre: 
     opcoes_menu = Menu(Menu_bar)
     if cont == 1:
         opcoes_menu.add_command(label="Nothing new")
+        cont_movie_cat = 0 
     else:
         # will show the movies that were added since the last time the user was online
         with open("database/users.csv", "r", encoding="UTF-8") as f:
@@ -69,17 +70,10 @@ def render_movies_list(gender: list = None):
     if not PANEL_CATALOG_MOVIE:
         raise ValueError("Panel Catelog Window missing")
 
-    #global MOVIE_WIDGETS
-
-    #for movie_widget in MOVIE_WIDGETS:
-    #    movie_widget.destroy()
-    
-    #MOVIE_WIDGETS = []
-
     if gender is None:
         gender = []
 
-    image_dimentions = [160, 160]
+    image_dimentions = [160, 200]
     btn = []
     poster = []
     id_movie = []
@@ -93,7 +87,8 @@ def render_movies_list(gender: list = None):
         btnImage2 = ImageTk.PhotoImage(btnImage)
         poster.append(btnImage2)
         id_movie.append(int(info_movie[0]))
-        MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i]), image_dimentions[0], image_dimentions[1], 10+(200*((i) % 5)), 10+(200*((i)//5))))
+        MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i]), image_dimentions[0], image_dimentions[1], 10+(250*((i) % 5)), 10+(210*((i)//5))))
+        
 
 
 def select(listbox_gender_option: Listbox, radio_filter: StringVar, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
@@ -167,12 +162,12 @@ def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
 
     Menu_bar.add_command(label="Quit", command=lambda: last_session(user_id))       # top level bar option
 
-    label_mamado = function.place_label_frame(window_menu, "Gender", 100, 200, 10, 10)
+    frame_gender = function.place_label_frame(window_menu, "Gender", 100, 200, 10, 10)
 
-    scrollbar = Scrollbar(label_mamado)
+    scrollbar = Scrollbar(frame_gender)
     scrollbar.pack(side='right', fill='y')
 
-    listbox_gender_option = Listbox(label_mamado, yscrollcommand=scrollbar.set, selectmode="multiple")
+    listbox_gender_option = Listbox(frame_gender, yscrollcommand=scrollbar.set, selectmode="multiple")
 
     listbox_gender_option.pack(side='left', fill='both')
     scrollbar.config(command=listbox_gender_option.yview)

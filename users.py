@@ -60,7 +60,7 @@ def new_pw(user_id, txt_new_pw: str, txt_new_repw: str):        # password chang
     else:
         messagebox.showerror(title="Warning!", message="The passwords must be the same!")       # error pop-up 
 
-def category_changed(chosen_cat: StringVar, user_id):
+def category_changed(chosen_cat: StringVar, user_id): # function to change the favorite category
     messagebox.showinfo(title="Change Result", message="You succesfully changed your favorite category to: {0}".format(chosen_cat.get()))
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         new_text = ""
@@ -68,7 +68,7 @@ def category_changed(chosen_cat: StringVar, user_id):
             users = line.split(";")
             if users[0] == user_id:
                 users[8] = chosen_cat.get()
-                new_text = new_text + ";".join(users) + "\n"
+                new_text = new_text + ";".join(users)
             else:
                 new_text = new_text + line
     with open("database/users.csv", "w", encoding="UTF-8") as f:

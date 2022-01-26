@@ -11,7 +11,7 @@ MOVIE_RATING_COUNT_INDEX = 8
 MOVIE_RATING_SUM_INDEX = 9
 
 
-def save_comments(entry_comments: Text, id_movie: int, id_user: int, list_comments: Text):
+def save_comments(entry_comments: Text, id_movie: int, id_user: int, list_comments: Text): # function to save comments
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         lines = f.readlines()
     user = []
@@ -31,7 +31,7 @@ def save_comments(entry_comments: Text, id_movie: int, id_user: int, list_commen
         f.write("(%s %s) %s : %s\n\n" % (datetime.datetime.now().strftime(
             "%H:%M"), datetime.datetime.now().strftime("%d/%m/%Y"), user[1], entry_comments.get("1.0", END).rstrip()))
 
-def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
+def favorite_add(id_user, movie: list, window_movie: Misc, id_movie): # function to add a movie to the favorite list
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         new_txt = ""
         for line in f:
@@ -53,9 +53,9 @@ def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
         f.write(new_txt)
         
     window_movie.destroy()
-    movie_interface(id_user, id_movie)
+    movie_interface(id_user, id_movie) #refresh teh window
 
-def favorite_del(id_user, movie: list, window_movie: Misc, id_movie):       
+def favorite_del(id_user, movie: list, window_movie: Misc, id_movie): # function to remove a movie from the favorite list       
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         new_txt = ""
         for line in f:
@@ -76,9 +76,9 @@ def favorite_del(id_user, movie: list, window_movie: Misc, id_movie):
         f.write(new_txt)
 
     window_movie.destroy()
-    movie_interface(id_user, id_movie)
+    movie_interface(id_user, id_movie)      #refresh the window
 
-def view_add(id_user, movie, window_movie, id_movie):
+def view_add(id_user, movie, window_movie, id_movie): # function to add a movie to the "Seen" list
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         new_txt = ""
         for line in f:
@@ -100,7 +100,7 @@ def view_add(id_user, movie, window_movie, id_movie):
         f.write(new_txt)
         
     window_movie.destroy()
-    movie_interface(id_user, id_movie)
+    movie_interface(id_user, id_movie)  #refresh teh window
 
 def view_del(id_user, movie, window_movie, id_movie):
     with open("database/users.csv", "r", encoding="UTF-8") as f:
@@ -123,9 +123,9 @@ def view_del(id_user, movie, window_movie, id_movie):
         f.write(new_txt)
 
     window_movie.destroy()
-    movie_interface(id_user, id_movie)
+    movie_interface(id_user, id_movie) #refresh teh window
 
-def add_rate(label: Label, rate_entry: Entry, id_movie: int):
+def add_rate(label: Label, rate_entry: Entry, id_movie: int): # function to add rating to a certain movie
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         new_txt = ""
         for line in f:
@@ -145,7 +145,7 @@ def add_rate(label: Label, rate_entry: Entry, id_movie: int):
         f.write(new_txt)
 
 
-def movie_interface(id_user: int, id_movie: int):
+def movie_interface(id_user: int, id_movie: int): # main function of the window "interface window"
     print(f'What ID is this? {id_movie}')
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
     movie = get_movie_metadata_as_list(id_movie)
@@ -218,10 +218,7 @@ def movie_interface(id_user: int, id_movie: int):
     list_comments.config(state=DISABLED)
 
     btn_entry_comments = function.place_button(window_movie, "Invite comment", "black", lambda: save_comments(
-        list_entry_comments, id_movie, id_user, list_comments), 1, 1)
+        list_entry_comments, id_movie, id_user, list_comments), 20, 400)
 
     
     window_movie.mainloop()
-
-
-#movie_interface(2, 2)

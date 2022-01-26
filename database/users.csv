@@ -1,7 +1,3 @@
 Id;First Name;Last Name;Email;Password;Role;Perfil Image;Last Acess;Favorite Category;Favorite Movie;Watched Movies
-1;admin;admin;admin;admin;admin;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/pokemon_pfp4.png;202201231612;None;None;None
+1;admin;admin;admin;admin;admin;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/pokemon_pfp4.png;202201231612;None;None%eu;%eu
 2;grupo7;grupo7;grupo7@grupo7.com;grupo7;admin;images/user.png;202201231614;None;None;None
-3;11;11;12;12;user;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/pokemon_pfp4.png;202201242030;Action;3 porquinhos%Bernardo e os 7 anões%Hulk%Spider-Man No Way Home;%Spider-Man No Way Home
-4;Vasco;Maceda;vascomaceda@gmail.com;1234;user;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/anime_pfp6.jpg;202201232023;None;None;None
-5;Bea;Maceda;beamaceda@gmail.com;1235;user;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/game_pfp5.jpg;202201082130;None;None;None
-6;Eduardo;Alves;eduardoalves@gmail.com;1235;user;C:/Users/Eduardo/Desktop/Documentos/Fac/AE/Python/Projeto/tkinter-managing-movies-and-series/images/pokemon_pfp4.png;202201232018;Action;None;None

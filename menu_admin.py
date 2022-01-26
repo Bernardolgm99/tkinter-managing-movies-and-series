@@ -8,7 +8,7 @@ import function
 import datetime
 
 
-def admin_menu(render_movies_list):
+def admin_menu(render_movies_list): # main function to create the Admin window
     window_admin = function.toplevel_window("MOVIETIME Admin", "950x600")
     window_admin.configure(background="#E0ECE4")
     window_admin.grab_set()
@@ -52,7 +52,7 @@ def admin_menu(render_movies_list):
         catalog_movie_admin, window_admin, render_movies_list), 100, 100)       # button to remove movies/series from the catalog
     window_admin.mainloop()
 
-def img_catalog(movie_dir: str, panel_option_admin: Misc, lbl_movie_dir: Entry):
+def img_catalog(movie_dir: str, panel_option_admin: Misc, lbl_movie_dir: Entry): # function to add an image to the movie catalog
     movie_dir = filedialog.askopenfilename(initialdir="./", title="Select The Catalog Image", parent= panel_option_admin, filetypes=
                                     (("png files", "*.png"), ("jpg files", "*.jpg"), ("jpeg files", "*.jpeg"), ("tiff files", "*.tiff")))
     lbl_movie_dir.insert(0, str(movie_dir))
@@ -63,7 +63,7 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, s
     time = datetime.datetime.now().time()
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
         cont_line = f.readlines()
-    save = str(int(cont_line[len(cont_line)-1].split(";")[0])+1) + ";" + movie.get() + ";" + lbl_movie_dir.get() + ";" + genre.get() + ";" + director.get() + ";" + synopsis.get() + ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + "0" + "0" + "0" + "0" + "\n"
+    save = str(int(cont_line[len(cont_line)-1].split(";")[0])+1) + ";" + movie.get() + ";" + lbl_movie_dir.get() + ";" + genre.get() + ";" + director.get() + ";" + synopsis.get() + ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "0" + "\n"
     with open("database/movies.csv", "a", encoding="UTF-8") as f:  # append the new data
         f.write(save)
     with open("comments/%s.csv" % (len(cont_line)), "w", encoding="UTF-8") as f:
@@ -100,9 +100,4 @@ def reset_movie(movie: Entry, genre: Entry, director: Entry, synopsis: Entry):  
     genre.delete(0, END)
     director.delete(0, END)
     synopsis.delete(0, END)
-
-
-
-
-
 
