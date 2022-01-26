@@ -37,19 +37,23 @@ def new_pw(user_id, txt_new_pw: str, txt_new_repw: str):        # password chang
         with open("database/users.csv", "r", encoding="UTF-8") as f:        # open the file to read and to compare the user id with the data
             new_text = ""
             var_user = ""
-            for line in f:
-                user = line.split(";")
-                if user_id == user[0]:
-                    if txt_new_pw == user[4]:
-                        messagebox.showerror(title="Warning!",message="Your new password is the same as the old password, try again!")      # warning pop-up
-                        var_user = user[4]      
-                        break
-                    messagebox.showinfo(title="Sucess", message="Your password has been changed!")      # success pop-up
-                    var_user = user[4]
-                    user[4] = txt_new_pw
-                    new_text = new_text + ";".join(user)
-                else:
-                    new_text = new_text + line
+            if txt_new_pw == "" and txt_new_repw == "":
+                messagebox.showerror(title="Warning!",message="You need to type something!")      # warning pop-up
+                return
+            else:
+                for line in f:
+                    user = line.split(";")
+                    if user_id == user[0]:
+                        if txt_new_pw == user[4]:
+                            messagebox.showerror(title="Warning!",message="Your new password is the same as the old password, try again!")      # warning pop-up
+                            var_user = user[4]      
+                            break
+                        messagebox.showinfo(title="Sucess", message="Your password has been changed!")      # success pop-up
+                        var_user = user[4]
+                        user[4] = txt_new_pw
+                        new_text = new_text + ";".join(user)
+                    else:
+                        new_text = new_text + line
         if txt_new_pw != var_user:
             with open("database/users.csv", "w", encoding="UTF-8") as f:        # re-write the data 
                 f.write(new_text)

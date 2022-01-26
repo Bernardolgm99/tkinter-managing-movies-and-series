@@ -1,6 +1,6 @@
 Id;Movies;Picture;Genres;Director;Synopsis;Time;numberOfVote;sumOfVote;midOfVote;Views
-1;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;222222222222;10;10;0;65
-2;Hulk;catalog_images/hulk.jpg;Action;Bernardo;oi;222222222222;9;80;0;35
+1;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;222222222222;8;49;6.1;87
+2;Hulk;catalog_images/hulk.jpg;Action;Bernardo;oi;222222222222;9;80;0;36
 3;Bernardo e os 7 anões;catalog_images/spider-man-no-way-home.jpg;Romance;Pão e Bea;oi;222222222222;0;0;0;1
 4;3 porquinhos;catalog_images/spider-man-no-way-home.jpg;eu;25; ;222222222222;0;0;0;3
 6;wqe;;eqw;eqw;eqw;202201260207;0;0;0;1

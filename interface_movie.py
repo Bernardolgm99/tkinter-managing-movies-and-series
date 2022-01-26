@@ -1,13 +1,10 @@
 from site import USER_SITE
-from tkinter import NORMAL, Label, Menu, Misc, Text
+from tkinter import NORMAL, Entry, Label, Menu, Misc, Text
 from tkinter.constants import DISABLED, END, LEFT, RIGHT, SUNKEN, TOP
 from tkinter.ttk import Treeview
 import datetime
-
 from PIL import Image, ImageTk
-
 import function
-
 from database import get_movie_metadata_as_list, increment_movie_view_count, get_movie_metadata
 
 MOVIE_RATING_COUNT_INDEX = 8
@@ -128,6 +125,26 @@ def view_del(id_user, movie, window_movie, id_movie):
     window_movie.destroy()
     movie_interface(id_user, id_movie)
 
+def add_rate(label: Label, rate_entry: Entry, id_movie: int):
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        new_txt = ""
+        for line in f:
+            movie = line.split(";")
+            if movie[0] != "Id":
+                if int(movie[0]) == int(id_movie):
+                    movie[7] = str(int(movie[7])+1)
+                    movie[8] = str(int(movie[8])+int(rate_entry.get()))
+                    movie[9] = str("{:.1f}".format(int(movie[8])/int(movie[7])))
+                    label.config(text="Rating %s" %(movie[9]))
+                    new_txt = new_txt + ";".join(movie)
+                else:
+                    new_txt = new_txt + line
+            else:
+                new_txt = new_txt + line
+    with open("database/movies.csv", "w", encoding="UTF-8") as f:
+        f.write(new_txt)
+
+
 def movie_interface(id_user: int, id_movie: int):
     print(f'What ID is this? {id_movie}')
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
@@ -150,16 +167,6 @@ def movie_interface(id_user: int, id_movie: int):
 
     movie_rating = "No Rating"
 
-    if len(movie) > 9:
-        try:
-            movie_rating_count = int(movie[MOVIE_RATING_COUNT_INDEX])
-            movie_rating_sum = int(movie[MOVIE_RATING_SUM_INDEX])
-        except ValueError:
-            movie_rating_count = 0
-            movie_rating_sum = 0
-        if movie_rating_count > 0:
-            movie_rating = "%.2f" % (movie_rating_sum / movie_rating_count)
-
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             users = line.split(";")
@@ -171,7 +178,7 @@ def movie_interface(id_user: int, id_movie: int):
                 else:
                     btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_del(id_user, movie, window_movie, id_movie), 1200, 100)
 
-    movie_rating_label = Label(window_movie, text=f"Rating: {movie_rating}")
+    movie_rating_label = Label(window_movie, text=f"Rating: {movie[9]}")
     movie_rating_label.place(x=1200, y=150)
     movie_rating_label.pack()
 
@@ -181,6 +188,10 @@ def movie_interface(id_user: int, id_movie: int):
     
     movie_view_count_label = Label(window_movie, text=f"Views: {movie_view_count}")
     movie_view_count_label.pack()
+ 
+    lbl_movie_rate = function.place_label(window_movie, "Rate this movie!", 5, 50)
+    movie_rate = function.place_entry(window_movie, 5, 5, 75)
+    btn_movie_rate = function.place_button(window_movie, "Rate It!", "black", lambda: add_rate(movie_rating_label, movie_rate, id_movie), 50, 75)
 
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
@@ -199,9 +210,9 @@ def movie_interface(id_user: int, id_movie: int):
     except FileNotFoundError:
         lines_comments = []
 
-    list_entry_comments = function.place_text(window_movie, 80, 10, 1, 150)
+    list_entry_comments = function.place_text(window_movie, 80, 10, 1, 450)
 
-    list_comments = function.place_text(window_movie, 80, 100, 1, 400)
+    list_comments = function.place_text(window_movie, 80, 10, 1, 500)
     for i in range(len(lines_comments)):
         list_comments.insert(END, lines_comments[i])
     list_comments.config(state=DISABLED)
