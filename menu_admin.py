@@ -7,6 +7,7 @@ from typing import Callable
 import function
 import datetime
 
+
 def admin_menu(render_movies_list):
     window_admin = function.toplevel_window("MOVIETIME Admin", "950x600")
     window_admin.grab_set()
@@ -66,12 +67,13 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, r
     save = str(len(cont_line)) + ";" + movie.get() + ";" + lbl_movie_dir.get() + ";" + genre.get() + ";" + director.get() + ";" + rating.get() + ";" + synopsis.get() + " " +  ";" + calender.strftime("%Y%m%d") + time.strftime("%H%M") + ";" + " " + "\n"
     with open("database/movies.csv", "a", encoding="UTF-8") as f:  # append the new data
         f.write(save)
-    with open("comments/%s.csv" % (len(cont_line)), "x", encoding="UTF-8") as f:
+    with open("comments/%s.csv" % (len(cont_line)), "w", encoding="UTF-8") as f:
         print("file created")
     render_movies_list()
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
     window_admin.destroy()
     admin_menu(render_movies_list)
+
 
 def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc, render_movies_list: Callable):       # remove movies/series function
     selected_to_remove = catalog_movie_admin.focus()
