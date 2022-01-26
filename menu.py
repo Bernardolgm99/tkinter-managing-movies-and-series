@@ -71,7 +71,10 @@ def render_movies_list(gender: list = None):
     global MOVIE_WIDGETS
 
     for movie_widget in MOVIE_WIDGETS:
-        movie_widget.destroy()
+        try:
+            movie_widget.destroy()
+        except Exception:
+            pass
     
     MOVIE_WIDGETS = []
 
@@ -103,12 +106,11 @@ def render_movies_list(gender: list = None):
         btnImage2 = ImageTk.PhotoImage(btnImage)
         # btnImage2.image = btnImage
         poster.append(btnImage2)
-        print(poster)
         id_movie.append(int(info_movie[0]))
         MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i-1], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5))))
 
 
-def select(btn, listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
+def select(listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
     gender = []
     gname = listbox_gender_option.curselection()
     for i in gname:
@@ -183,7 +185,7 @@ def menu(user_id, gender: List = []):  # menu function
     for i in range(len(movie_cat_list)):
         listbox_gender_option.insert(END, movie_cat_list[i])
 
-    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(btn, listbox_gender_option, panel_catalog_movie, user_id, window_menu), 65, 200)
+    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, panel_catalog_movie, user_id, window_menu), 65, 200)
 
     render_movies_list(gender)
 

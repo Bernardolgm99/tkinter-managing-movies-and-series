@@ -85,7 +85,10 @@ def perfil(user_id):        # user perfil based on his id function
                 # writes a label on the perfil saying the users email
                 email = user_line[3]
                 global img_1
-                img = Image.open(user_line[6])      # show the profile picture selected (or default) by the user
+                try:
+                    img = Image.open(user_line[6])      # show the profile picture selected (or default) by the user
+                except FileNotFoundError:
+                    img = Image.new("RGB", (160, 160))
                 resized_img_1 = img.resize((200,200), Image.ANTIALIAS)      #resize the image
                 img_1 = ImageTk.PhotoImage(resized_img_1)       
                 label = Label(perfil_window, image=img_1, bd=5, relief=SUNKEN)      #label where the picture will appear
