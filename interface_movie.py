@@ -48,7 +48,7 @@ def favorite_add(id_user, movie: list, window_movie: Misc, id_movie):
                     user_fav = user_fav_strip.split("%") 
                     user_fav.append(movie[1])
                     user_fav.sort()
-                    users[9] = "%".join(user_fav) + "\n"
+                    users[9] = "%".join(user_fav)
                     new_txt = new_txt + ";".join(users)
             else:
                 new_txt = new_txt + line

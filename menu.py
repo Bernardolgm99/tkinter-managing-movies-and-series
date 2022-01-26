@@ -189,7 +189,7 @@ def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     for i in range(len(movie_cat_list)):
         listbox_gender_option.insert(END, movie_cat_list[i])
 
-    label_filter_frame_type = function.place_label_frame(window_menu,"Type of Filter", 20, 20, 10, 400)
+    label_filter_frame_type = function.place_label_frame(window_menu,"Type of Filter", 20, 20, 10, 200)
 
     radio_filter = StringVar()
     
@@ -204,10 +204,8 @@ def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     radiobutton3 = Radiobutton(label_filter_frame_type, text="View", variable=radio_filter, value="view")
     radiobutton3.grid(row=2)
 
-    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, radio_filter, panel_catalog_movie, user_id, window_menu), 65, 200)
+    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, radio_filter, panel_catalog_movie, user_id, window_menu), 125, 250)
 
     render_movies_list(movies_organized)
 
     window_menu.mainloop()
-
-menu("3")
