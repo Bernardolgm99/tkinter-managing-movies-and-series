@@ -1,3 +1,4 @@
+import re
 from tkinter import *  # type: ignore
 from tkinter import messagebox
 import function
@@ -25,18 +26,27 @@ def reset_sign_up():  # reset function of Sign Up
 
 
 def sign_up():  # sign up function
-    if txt_uppw.get() == txt_rpw.get():
-        messagebox.showinfo(title="Sucess", message="Your account has been created!")       # success pop-up
-        with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
-            cont_line = f.readlines()
-        save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
-            ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "None" + ";" + "None" + ";" + "None" + "\n"        # variable that has the whole default information of the user 
-        with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
-            f.write(save)
-        reset_sign_in()
+    regex= ("r'^[a-z0-9._-]+@[a-z0-9]+.[a-z.a-z]{1,3}$")
+    if (re.search(regex, txt_email.get())):
+        with open("database/users.csv", "r", encoding="UTF-8") as f:
+            for line in f:
+                users_email = line.split(";")
+                if txt_email.get() not in users_email:
+                    if txt_uppw.get() == txt_rpw.get():
+                        messagebox.showinfo(title="Sucess", message="Your account has been created!")       # success pop-up
+                        with open("database/users.csv", "r", encoding="UTF-8") as f:       # open the file to read and to compare the user id with the data
+                            cont_line = f.readlines()
+                        save = str(len(cont_line)) + ";" + txt_fname.get() + ";" + txt_lname.get() + ";" + txt_email.get() + \
+                            ";" + txt_uppw.get() + ";" + "user" + ";" + "images/user.png" + ";" + "0000/00/00 --:--" + ";" + "None" + ";" + "None" + ";" + "None" + "\n"        # variable that has the whole default information of the user 
+                        with open("database/users.csv", "a", encoding="UTF-8") as f:  # append the new data
+                            f.write(save)
+                        reset_sign_in()
+                    else:
+                        messagebox.showerror(title="Warning!", message="The passwords must be the same!")       # warning pop-up
+                else:
+                    messagebox.showerror(title="Warning!", message="The Email already exists")     
     else:
-        messagebox.showerror(title="Warning!", message="The passwords must be the same!")       # warning pop-up
-
+        messagebox.showerror(title="Warning!", message="Email doesn't match with the required format.")
 
 def sign_in():  # sign in function
     global user_id

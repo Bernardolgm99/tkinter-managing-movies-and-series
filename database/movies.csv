@@ -1,9 +1,10 @@
-Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space;;
-1;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;8.8;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;222222222222; ;;9
-2;Hulk;catalog_images/hulk.jpg;Action;Bernardo;8.6;oi;222222222222;9;80;12
-3;Bernardo e os 7 anões;catalog_images/spider-man-no-way-home.jpg;Romance;Pão e Bea;10;oi;222222222222;;;13
-4;3 porquinhos;catalog_images/spider-man-no-way-home.jpg;eu;25;hccgvjbuiuyfvtyc; ;222222222222;;;1
-6;wqe;;eqw;eqw;eqw;eqw ;202201260207; 
-8;wqeeeeqweq;;eqweeeqeq;eqweeewqe;eqweeqweewq;eqweeeqweqw ;202201260207; 
-7;ffff;;ffff;fff;fff;ffff ;202201260209; 
-8;fdsfds;;fdsfds;fdsfdsfd;sfdsfds;fdsfds ;202201260209; 
+Id;Movies;Picture;Genres;Director;Synopsis;Time;numberOfVote;sumOfVote;midOfVote;Views
+1;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;222222222222;10;10;0;65
+2;Hulk;catalog_images/hulk.jpg;Action;Bernardo;oi;222222222222;9;80;0;35
+3;Bernardo e os 7 anões;catalog_images/spider-man-no-way-home.jpg;Romance;Pão e Bea;oi;222222222222;0;0;0;1
+4;3 porquinhos;catalog_images/spider-man-no-way-home.jpg;eu;25; ;222222222222;0;0;0;3
+6;wqe;;eqw;eqw;eqw;202201260207;0;0;0;1
+8;wqeeeeqweq;;eqweeeqeq;eqweeewqe;eqweeeqweqw;202201260207;0;0;0;3
+7;ffff;;ffff;fff;ffff;202201260209;0;0;0;2
+8;fdsfds;;fdsfds;fdsfdsfd;fdsfds;202201260209;0;0;0;3
+9;Spider-Man No Way Home;catalog_images/spider-man-no-way-home.jpg;Action;Jon Watts;With Spider-Man's identity now revealed, our friendly neighborhood web-slinger is unmasked and no longer able to separate his normal life as Peter Parker from the high stakes of being a superhero. When Peter asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.;222222222222;0;0;0;33
