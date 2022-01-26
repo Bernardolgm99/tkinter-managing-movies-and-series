@@ -145,7 +145,7 @@ def movie_interface(id_user: int, id_movie: int):
     label_img_movie.pack(padx=10, pady=10, side=RIGHT)
 
     synopsis_movie = function.place_text(window_movie, 60, 10, 20, 110)
-    synopsis_movie.insert(END, movie[6])
+    synopsis_movie.insert(END, movie[5])
     synopsis_movie.config(state=DISABLED, bg="#f0f0f0")
 
     movie_rating = "No Rating"
