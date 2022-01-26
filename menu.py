@@ -91,7 +91,6 @@ def render_movies_list(gender: list = None):
         btnImage = btnImage.resize((image_dimentions[0], image_dimentions[1]), Image.ANTIALIAS)
         btnImage2 = ImageTk.PhotoImage(btnImage)
         poster.append(btnImage2)
-        print(poster)
         id_movie.append(int(info_movie[0]))
         MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i-1], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5))))
 

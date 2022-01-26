@@ -9,6 +9,11 @@ from PIL import Image, ImageTk
 
 import function
 
+from database import get_movie_metadata_as_list, increment_movie_view_count, get_movie_metadata
+
+MOVIE_RATING_COUNT_INDEX = 8
+MOVIE_RATING_SUM_INDEX = 9
+
 
 def save_comments(entry_comments: Text, id_movie: int, id_user: int):
     with open("database/users.csv", "r", encoding="UTF-8") as f:
@@ -121,16 +126,11 @@ def view_del(id_user, movie, window_movie, id_movie):
     movie_interface(id_user, id_movie)
 
 def movie_interface(id_user: int, id_movie: int):
+    print(f'What ID is this? {id_movie}')
     window_movie = function.toplevel_window("MOVIETIME", "1400x800")
-    with open("database/movies.csv", "r", encoding="UTF-8") as f:
-        movie = []
-        for i, line in enumerate(f, start=1):
-            if (id_movie+1) == i:
-                movie = line.split(";")
-                break
-        else:
-            # Só executa o ele se não ativar o break
-            return None
+    movie = get_movie_metadata_as_list(id_movie)
+    movie_metadata = get_movie_metadata(id_movie)
+    increment_movie_view_count(id_movie)
 
     title_movie = function.place_label(
         window_movie, str(movie[1]), 0, 0, font="Verdana 40")
@@ -145,6 +145,18 @@ def movie_interface(id_user: int, id_movie: int):
     synopsis_movie.insert(END, movie[6])
     synopsis_movie.config(state=DISABLED, bg="#f0f0f0")
 
+    movie_rating = "No Rating"
+
+    if len(movie) > 9:
+        try:
+            movie_rating_count = int(movie[MOVIE_RATING_COUNT_INDEX])
+            movie_rating_sum = int(movie[MOVIE_RATING_SUM_INDEX])
+        except ValueError:
+            movie_rating_count = 0
+            movie_rating_sum = 0
+        if movie_rating_count > 0:
+            movie_rating = "%.2f" % (movie_rating_sum / movie_rating_count)
+
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             users = line.split(";")
@@ -155,6 +167,17 @@ def movie_interface(id_user: int, id_movie: int):
                     btn_favorite_add = function.place_button(window_movie, "Add to Favorite List", "blue", lambda: favorite_add(id_user, movie, window_movie, id_movie), 1200, 100)
                 else:
                     btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_del(id_user, movie, window_movie, id_movie), 1200, 100)
+
+    movie_rating_label = Label(window_movie, text=f"Rating: {movie_rating}")
+    movie_rating_label.place(x=1200, y=150)
+    movie_rating_label.pack()
+
+    movie_view_count = movie_metadata.get("View Count")
+    if not movie_view_count:
+        movie_view_count = 0
+    
+    movie_view_count_label = Label(window_movie, text=f"Views: {movie_view_count}")
+    movie_view_count_label.pack()
 
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
