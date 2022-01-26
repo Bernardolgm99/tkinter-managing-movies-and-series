@@ -68,7 +68,7 @@ def favorite_del(id_user, movie: list, window_movie: Misc, id_movie):
                     if movie_not_remove != movie[1]:
                         user_fav2.append(movie_not_remove) 
                         user_fav2.sort()
-                users[9] = "%".join(user_fav2) + "\n"
+                users[9] = "%".join(user_fav2) 
                 new_txt = new_txt + ";".join(users)
             else:
                 new_txt = new_txt + line
@@ -78,6 +78,52 @@ def favorite_del(id_user, movie: list, window_movie: Misc, id_movie):
     window_movie.destroy()
     movie_interface(id_user, id_movie)
 
+def view_add(id_user, movie, window_movie, id_movie):
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        new_txt = ""
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                if users[10] == "None\n":
+                    users[10] = movie[1] + "\n"
+                    new_txt = new_txt + ";".join(users)
+                else:
+                    user_view_strip = users[10].strip("\n")
+                    user_view = user_view_strip.split("%") 
+                    user_view.append(movie[1])
+                    user_view.sort()
+                    users[10] = "%".join(user_view) + "\n"
+                    new_txt = new_txt + ";".join(users)
+            else:
+                new_txt = new_txt + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:
+        f.write(new_txt)
+        
+    window_movie.destroy()
+    movie_interface(id_user, id_movie)
+
+def view_del(id_user, movie, window_movie, id_movie):
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        new_txt = ""
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                user_view_strip = users[10].strip("\n")
+                user_view = user_view_strip.split("%")
+                user_view2 = []
+                for movie_not_remove in user_view:
+                    if movie_not_remove != movie[1]:
+                        user_view2.append(movie_not_remove) 
+                        user_view2.sort()
+                users[10] = "%".join(user_view2) + "\n"
+                new_txt = new_txt + ";".join(users)
+            else:
+                new_txt = new_txt + line
+    with open("database/users.csv", "w", encoding="UTF-8") as f:
+        f.write(new_txt)
+
+    window_movie.destroy()
+    movie_interface(id_user, id_movie)
 
 def movie_interface(id_user: int, id_movie: int):
     print(f'What ID is this? {id_movie}')
@@ -133,6 +179,17 @@ def movie_interface(id_user: int, id_movie: int):
     movie_view_count_label = Label(window_movie, text=f"Views: {movie_view_count}")
     movie_view_count_label.pack()
 
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            users = line.split(";")
+            if users[0] == id_user:
+                users[10] = users[10].strip("\n")
+                users_fav = users[10].split("%")
+                if movie[1] not in users_fav:
+                    btn_view_add = function.place_button(window_movie, "Already Seen", "blue", lambda: view_add(id_user, movie, window_movie, id_movie), 1200, 50)
+                else:
+                    btn_view_remove = function.place_button(window_movie, "Not Seen", "red", lambda: view_del(id_user, movie, window_movie, id_movie), 1200, 50)
+    
     try:
         with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
             lines_comments = f.readlines()

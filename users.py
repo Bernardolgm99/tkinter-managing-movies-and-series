@@ -9,7 +9,7 @@ from unicodedata import category
 import function
 from PIL import Image, ImageTk
 
-from tkinter import SUNKEN, TOP, Label, Misc, OptionMenu, StringVar, filedialog, messagebox, PhotoImage, ttk
+from tkinter import SUNKEN, TOP, Label, Misc, OptionMenu, StringVar, filedialog, messagebox, PhotoImage, ttk, Scrollbar, Listbox, END
 
 def image(perfil_window:Misc, user_id):             # perfil image selection function
     filename = filedialog.askopenfilename(initialdir="images",title="Select file", parent=perfil_window, filetypes=(
@@ -69,7 +69,6 @@ def category_changed(chosen_cat: StringVar, user_id):
                 new_text = new_text + line
     with open("database/users.csv", "w", encoding="UTF-8") as f:
         f.write(new_text)
-        
 
 def perfil(user_id):        # user perfil based on his id function
     perfil_window = function.toplevel_window("Perfil", "600x800")
@@ -129,11 +128,11 @@ def perfil(user_id):        # user perfil based on his id function
                 if movies[3] not in category_list:
                     category_list.append(movies[3])
     
-    lbl_choose_cat = function.place_label(perfil_window, "Choose your favorite category: ", 130, 600, "grey")
+    lbl_choose_cat = function.place_label(perfil_window, "Choose your favorite category: ", 130, 500, "grey")
 
     chosen_cat = tkinter.StringVar()
     cb_categories = ttk.Combobox(perfil_window, values = category_list, textvariable=chosen_cat)
-    cb_categories.place(x=300, y=600)
+    cb_categories.place(x=300, y=500)
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             users = line.split(";")
@@ -141,7 +140,51 @@ def perfil(user_id):        # user perfil based on his id function
                 if users[8] != "None\n":
                     cb_categories.set(users[8])
 
-    btn_cb_categories = function.place_button(perfil_window, "Confirm Change", "red", lambda: category_changed(chosen_cat, user_id), 300, 700)
+    btn_cb_categories = function.place_button(perfil_window, "Confirm Change", "red", lambda: category_changed(chosen_cat, user_id), 300, 550)
+
+    #Listbox
+    lbl_scroll = function.place_label_frame(perfil_window, "Favorite Movies", 150, 200, 100, 600)
+
+    scrollbar = Scrollbar(lbl_scroll)
+    scrollbar.pack(side='right', fill='y')
+
+    listbox_movie_option = Listbox(lbl_scroll, yscrollcommand=scrollbar.set, selectmode="multiple")
+
+    listbox_movie_option.pack(side='left', fill='both')
+    scrollbar.config(command=listbox_movie_option.yview)
+
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            users = line.split(";")
+            # analyzes if the movie publishment date is greater than the date of the last user activity
+            if users[0] == user_id:
+                if users[9] != "None\n":
+                    user_fav_strip = users[9].strip("\n")
+                    user_fav = user_fav_strip.split("%")
+                    for i in range(int(len(user_fav))):
+                        listbox_movie_option.insert(END, user_fav[i])
+
+    #Listbox
+    lbl_scroll_vist = function.place_label_frame(perfil_window, "Movies I Saw", 150, 200, 350, 600)
+
+    scrollbar = Scrollbar(lbl_scroll_vist)
+    scrollbar.pack(side='right', fill='y')
+
+    listbox_vist_option = Listbox(lbl_scroll_vist, yscrollcommand=scrollbar.set, selectmode="multiple")
+
+    listbox_vist_option.pack(side='left', fill='both')
+    scrollbar.config(command=listbox_vist_option.yview)
+
+    with open("database/users.csv", "r", encoding="UTF-8") as f:
+        for line in f:
+            users = line.split(";")
+            # analyzes if the movie publishment date is greater than the date of the last user activity
+            if users[0] == user_id:
+                if users[10] != "None\n":
+                    user_view_strip = users[10].strip("\n")
+                    user_view = user_view_strip.split("%")
+                    for i in range(int(len(user_view))):
+                        listbox_vist_option.insert(END, user_view[i])
 
     btn_avatar = function.place_button(         
         perfil_window, "New Profile Pic", "blue", lambda:image (perfil_window, user_id), 20, 20)    #button to change the profile picture 
