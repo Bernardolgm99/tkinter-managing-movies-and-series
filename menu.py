@@ -1,4 +1,5 @@
-from tkinter import END, Button, Frame, Label, LabelFrame, Listbox, Menu, Menubutton, Misc, PanedWindow, Scrollbar, mainloop, messagebox, ttk, filedialog
+from msilib.schema import RadioButton
+from tkinter import END, Button, Frame, IntVar, Label, LabelFrame, Listbox, Menu, Menubutton, Misc, PanedWindow, Radiobutton, Scrollbar, StringVar, mainloop, messagebox, ttk, filedialog
 import tkinter as tk
 from typing import List
 from PIL import Image, ImageTk
@@ -92,11 +93,14 @@ def render_movies_list(gender: list = None):
         btnImage2 = ImageTk.PhotoImage(btnImage)
         poster.append(btnImage2)
         id_movie.append(int(info_movie[0]))
-        MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i-1], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5))))
+        MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i]), image_dimentions[0], image_dimentions[1], 10+(200*((i) % 5)), 10+(200*((i)//5))))
 
 
-def select(listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
+def select(listbox_gender_option: Listbox, radio_filter: StringVar, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
     gender = ["",[],1]
+
+    gender[2] = radio_filter.get()
+
     gname = listbox_gender_option.curselection()
     for i in gname:
         op = listbox_gender_option.get(i)
@@ -116,12 +120,12 @@ def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     for movie in movies_list:
         if (filter_movie[0] == movie[1][:len(file_movies[0])-1]) and ((movie[3] in filter_movie[1]) or (len(filter_movie[1])==0)) and (movie[0] != "Id"):
             movies_organized.append(movie)
-    if filter_movie[2] == 1: #organize by name
+    if filter_movie[2] == "title": #organize by name
         movies_organized.sort(key=lambda x:x[1])
-    elif filter_movie[2] == 2: #organize by rating
-        movies_organized.sort(key=lambda x:x[11])
-    elif filter_movie[2] == 3: #organize by views
-        movies_organized.sort(key=lambda x:x[12]) 
+    elif filter_movie[2] == "rating": #organize by rating
+        movies_organized.sort(key=lambda x:x[9])
+    elif filter_movie[2] == "view": #organize by views
+        movies_organized.sort(key=lambda x:x[10]) 
 
     global USER_ID
     USER_ID = user_id
@@ -185,8 +189,25 @@ def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     for i in range(len(movie_cat_list)):
         listbox_gender_option.insert(END, movie_cat_list[i])
 
-    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, panel_catalog_movie, user_id, window_menu), 65, 200)
+    label_filter_frame_type = function.place_label_frame(window_menu,"Type of Filter", 20, 20, 10, 400)
+
+    radio_filter = StringVar()
+    
+    radio_filter.set("title")
+
+    radiobutton1 = Radiobutton(label_filter_frame_type, text="Title", variable=radio_filter, value="title")
+    radiobutton1.grid(row=0)
+
+    radiobutton2 = Radiobutton(label_filter_frame_type, text="Rating", variable=radio_filter, value="rating")
+    radiobutton2.grid(row=1)
+
+    radiobutton3 = Radiobutton(label_filter_frame_type, text="View", variable=radio_filter, value="view")
+    radiobutton3.grid(row=2)
+
+    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, radio_filter, panel_catalog_movie, user_id, window_menu), 65, 200)
 
     render_movies_list(movies_organized)
 
     window_menu.mainloop()
+
+menu("3")
