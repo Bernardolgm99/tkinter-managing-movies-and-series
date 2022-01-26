@@ -110,8 +110,11 @@ def movie_interface(id_user: int, id_movie: int):
                 else:
                     btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_del(id_user, movie, window_movie, id_movie), 1200, 100)
 
-    with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
-        lines_comments = f.readlines()
+    try:
+        with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
+            lines_comments = f.readlines()
+    except FileNotFoundError:
+        lines_comments = []
 
     list_entry_comments = function.place_text(window_movie, 80, 10, 1, 150)
 
