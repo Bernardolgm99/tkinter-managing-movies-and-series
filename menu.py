@@ -82,7 +82,7 @@ def render_movies_list(gender: list = None):
         lines = f.readlines()
     movie_list = []
     if len(gender) != 0:
-        movie_list.append("Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space")
+        movie_list.append("Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space;Rating Count;Rating Sum")
     for line in lines:
         movie_info = line.split(";")
         if (movie_info[3] in gender) or (len(gender) == 0):

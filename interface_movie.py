@@ -9,6 +9,9 @@ from PIL import Image, ImageTk
 
 import function
 
+MOVIE_RATING_COUNT_INDEX = 8
+MOVIE_RATING_SUM_INDEX = 9
+
 
 def save_comments(entry_comments: Text, id_movie: int, id_user: int):
     with open("database/users.csv", "r", encoding="UTF-8") as f:
@@ -99,6 +102,14 @@ def movie_interface(id_user: int, id_movie: int):
     synopsis_movie.insert(END, movie[6])
     synopsis_movie.config(state=DISABLED, bg="#f0f0f0")
 
+    movie_rating = "No Rating"
+
+    if len(movie) > 9:
+        movie_rating_count = int(movie[MOVIE_RATING_COUNT_INDEX])
+        movie_rating_sum = int(movie[MOVIE_RATING_SUM_INDEX])
+        if movie_rating_count > 0:
+            movie_rating = "%.2f" % (movie_rating_sum / movie_rating_count)
+
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         for line in f:
             users = line.split(";")
@@ -109,6 +120,10 @@ def movie_interface(id_user: int, id_movie: int):
                     btn_favorite_add = function.place_button(window_movie, "Add to Favorite List", "blue", lambda: favorite_add(id_user, movie, window_movie, id_movie), 1200, 100)
                 else:
                     btn_favorite_remove = function.place_button(window_movie, "Remove from Favorite List", "red", lambda: favorite_del(id_user, movie, window_movie, id_movie), 1200, 100)
+
+    movie_rating_label = Label(window_movie, text=f"Rating: {movie_rating}")
+    movie_rating_label.place(x=1200, y=150)
+    movie_rating_label.pack()
 
     try:
         with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
