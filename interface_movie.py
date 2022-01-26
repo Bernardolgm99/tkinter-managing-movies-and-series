@@ -1,6 +1,5 @@
-from email.encoders import encode_noop
 from site import USER_SITE
-from tkinter import Label, Menu, Misc, Text
+from tkinter import NORMAL, Label, Menu, Misc, Text
 from tkinter.constants import DISABLED, END, LEFT, RIGHT, SUNKEN, TOP
 from tkinter.ttk import Treeview
 import datetime
@@ -15,7 +14,7 @@ MOVIE_RATING_COUNT_INDEX = 8
 MOVIE_RATING_SUM_INDEX = 9
 
 
-def save_comments(entry_comments: Text, id_movie: int, id_user: int):
+def save_comments(entry_comments: Text, id_movie: int, id_user: int, list_comments: Text):
     with open("database/users.csv", "r", encoding="UTF-8") as f:
         lines = f.readlines()
     user = []
@@ -23,6 +22,10 @@ def save_comments(entry_comments: Text, id_movie: int, id_user: int):
         user = lines[i].split(";")
         if user[0] == id_user:
             break
+    list_comments.config(state=NORMAL)
+    list_comments.insert(END,"(%s %s) %s : %s\n\n" % (datetime.datetime.now().strftime(
+            "%H:%M"), datetime.datetime.now().strftime("%d/%m/%Y"), user[1], entry_comments.get("1.0", END).rstrip()))
+    list_comments.config(state=DISABLED)
     with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
         lines = f.readlines()
     with open("comments/%s.csv" % (id_movie), "w", encoding="UTF-8") as f:
@@ -198,13 +201,14 @@ def movie_interface(id_user: int, id_movie: int):
 
     list_entry_comments = function.place_text(window_movie, 80, 10, 1, 150)
 
-    btn_entry_comments = function.place_button(window_movie, "Invite comment", "black", lambda: save_comments(
-        list_entry_comments, id_movie, id_user), 1, 1)
-
     list_comments = function.place_text(window_movie, 80, 100, 1, 400)
     for i in range(len(lines_comments)):
         list_comments.insert(END, lines_comments[i])
     list_comments.config(state=DISABLED)
+
+    btn_entry_comments = function.place_button(window_movie, "Invite comment", "black", lambda: save_comments(
+        list_entry_comments, id_movie, id_user, list_comments), 1, 1)
+
     
     window_movie.mainloop()
 
