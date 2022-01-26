@@ -48,6 +48,7 @@ def place_button(window: Misc, text: str, fg: str, command, x: int, y: int) -> B
 def button_img(window: Misc, image: ImageTk.PhotoImage, command, width: int, height: int, x: int, y: int) -> Button:
     button = Button(window, image=image, command=command, width = width, height = height)
     button.place(x=x, y=y)
+    button.image = image
     return button
 
 

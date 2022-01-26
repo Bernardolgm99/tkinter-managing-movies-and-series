@@ -166,11 +166,12 @@ def movie_interface(id_user: int, id_movie: int):
                     btn_view_add = function.place_button(window_movie, "Already Seen", "blue", lambda: view_add(id_user, movie, window_movie, id_movie), 1200, 50)
                 else:
                     btn_view_remove = function.place_button(window_movie, "Not Seen", "red", lambda: view_del(id_user, movie, window_movie, id_movie), 1200, 50)
-
-
     
-    with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
-        lines_comments = f.readlines()
+    try:
+        with open("comments/%s.csv" % (id_movie), "r", encoding="UTF-8") as f:
+            lines_comments = f.readlines()
+    except FileNotFoundError:
+        lines_comments = []
 
     list_entry_comments = function.place_text(window_movie, 80, 10, 1, 150)
 

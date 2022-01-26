@@ -2,11 +2,12 @@ from ast import Str
 from itertools import count
 from tkinter import Button, Entry, Misc, filedialog, messagebox, ttk
 from tkinter.constants import END
+from typing import Callable
 
 import function
 import datetime
 
-def admin_menu():
+def admin_menu(render_movies_list):
     window_admin = function.toplevel_window("MOVIETIME Admin", "950x600")
     window_admin.grab_set()
     panel_calog_movie_admin = function.panel_window(window_admin, 900, 231, 20, 20)
@@ -43,12 +44,12 @@ def admin_menu():
 
 
     btn = function.place_button(panel_option_admin, "Add", "Blue", lambda: add_movie(
-        window_admin, movie_name, movie_genre, movie_director, movie_rating, movie_synopsis, lbl_movie_dir), 20, 100)     # button to add movies/series to the catalog
+        window_admin, movie_name, movie_genre, movie_director, movie_rating, movie_synopsis, lbl_movie_dir, render_movies_list), 20, 100)     # button to add movies/series to the catalog
     btn = function.place_button(panel_option_admin, "Reset", "Red", lambda: reset_movie(
         movie_name, movie_genre, movie_director, movie_rating, movie_synopsis), 60, 100)    #button to reset the whole section of entries 
 
     btn = function.place_button(panel_option_admin, "Remove Selected", "Red", lambda: del_movie(
-        catalog_movie_admin, window_admin), 100, 100)       # button to remove movies/series from the catalog
+        catalog_movie_admin, window_admin, render_movies_list), 100, 100)       # button to remove movies/series from the catalog
     window_admin.mainloop()
 
 def img_catalog(movie_dir: str, panel_option_admin: Misc, lbl_movie_dir: Entry):
@@ -57,7 +58,7 @@ def img_catalog(movie_dir: str, panel_option_admin: Misc, lbl_movie_dir: Entry):
     lbl_movie_dir.insert(0, str(movie_dir))
 
 
-def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, rating: Entry,synopsis: Entry, lbl_movie_dir: Entry):      # add movies/series function
+def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, rating: Entry,synopsis: Entry, lbl_movie_dir: Entry, render_movies_list: Callable):      # add movies/series function
     calender = datetime.datetime.now()
     time = datetime.datetime.now().time()
     with open("database/movies.csv", "r", encoding="UTF-8") as f:
@@ -67,11 +68,12 @@ def add_movie(window_admin: Misc, movie: Entry, genre: Entry, director: Entry, r
         f.write(save)
     with open("comments/%s.csv" % (len(cont_line)), "x", encoding="UTF-8") as f:
         print("file created")
+    render_movies_list()
     messagebox.showinfo(title="Sucess", message="Movie successfully added", parent=window_admin)        # succes pop-up
     window_admin.destroy()
-    admin_menu()
+    admin_menu(render_movies_list)
 
-def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc):       # remove movies/series function
+def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc, render_movies_list: Callable):       # remove movies/series function
     selected_to_remove = catalog_movie_admin.focus()
     selected_to_remove = int(selected_to_remove[1:], 16)
     i = 0
@@ -86,9 +88,10 @@ def del_movie(catalog_movie_admin: ttk.Treeview, window_admin: Misc):       # re
                 new_text = new_text + line
     with open("database/movies.csv", "w", encoding="UTF-8") as f:      # re-write the data
         f.write(new_text)
+    render_movies_list()
     messagebox.showinfo(title="Sucess", message="Movie successfully deleted", parent=window_admin)      # success pop-up
     window_admin.destroy()
-    admin_menu()
+    admin_menu(render_movies_list)
 
 
 def reset_movie(movie: Entry, genre: Entry, director: Entry, rating: Entry, synopsis: Entry):       # reset function
