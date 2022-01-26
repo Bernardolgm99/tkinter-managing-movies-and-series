@@ -68,58 +68,61 @@ def render_movies_list(gender: list = None):
     if not PANEL_CATALOG_MOVIE:
         raise ValueError("Panel Catelog Window missing")
 
-    global MOVIE_WIDGETS
+    #global MOVIE_WIDGETS
 
-    for movie_widget in MOVIE_WIDGETS:
-        movie_widget.destroy()
+    #for movie_widget in MOVIE_WIDGETS:
+    #    movie_widget.destroy()
     
-    MOVIE_WIDGETS = []
+    #MOVIE_WIDGETS = []
 
     if gender is None:
         gender = []
-
-    with open(file_movies, "r", encoding="UTF-8") as f:
-        lines = f.readlines()
-    movie_list = []
-    if len(gender) != 0:
-        movie_list.append("Id;Movies;Picture;Genres;Director;Rating;Synopsis;Time;Empty Space")
-    for line in lines:
-        movie_info = line.split(";")
-        if (movie_info[3] in gender) or (len(gender) == 0):
-            movie_list.append(line)
 
     image_dimentions = [160, 160]
     btn = []
     poster = []
     id_movie = []
-    for i in range(1, len(movie_list)):
-        info_movie = movie_list[i].split(";")
-        print(info_movie)
+    for i in range(len(gender)):
+        info_movie = gender[i]
         try:
             btnImage = Image.open(info_movie[2]) if info_movie[2] else Image.new("RGB", (160, 160))
         except FileNotFoundError:
             btnImage = Image.new("RGB", (160, 160))
         btnImage = btnImage.resize((image_dimentions[0], image_dimentions[1]), Image.ANTIALIAS)
         btnImage2 = ImageTk.PhotoImage(btnImage)
-        # btnImage2.image = btnImage
         poster.append(btnImage2)
         print(poster)
         id_movie.append(int(info_movie[0]))
         MOVIE_WIDGETS.append(function.button_img(PANEL_CATALOG_MOVIE, poster[i-1], lambda i=i: interface_movie.movie_interface(USER_ID, id_movie[i-1]), image_dimentions[0], image_dimentions[1], 10+(200*((i-1) % 5)), 10+(200*((i-1)//5))))
 
 
-def select(btn, listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
-    gender = []
+def select(listbox_gender_option: Listbox, panel_catalog_movie: PanedWindow, user_id: int, window_menu: Misc):
+    gender = ["",[],1]
     gname = listbox_gender_option.curselection()
     for i in gname:
         op = listbox_gender_option.get(i)
-        gender.append(op)
+        gender[1].append(op)
     window_menu.destroy()
     menu(user_id,gender)
 
-
-def menu(user_id, gender: List = []):  # menu function
+def menu(user_id, filter_movie: List = ["",[],1]):  # menu function
     window_menu = function.tk_window("MOVIETIME", "1600x1000", [1000, 650], [1600, 1000])      # Main window
+
+    with open("database/movies.csv", "r", encoding="UTF-8") as f:
+        lines = f.readlines()
+    movies_list = []
+    for line in lines:
+        movies_list.append(line.split(";"))
+    movies_organized = []
+    for movie in movies_list:
+        if (filter_movie[0] == movie[1][:len(file_movies[0])-1]) and ((movie[3] in filter_movie[1]) or (len(filter_movie[1])==0)) and (movie[0] != "Id"):
+            movies_organized.append(movie)
+    if filter_movie[2] == 1: #organize by name
+        movies_organized.sort(key=lambda x:x[1])
+    elif filter_movie[2] == 2: #organize by rating
+        movies_organized.sort(key=lambda x:x[11])
+    elif filter_movie[2] == 3: #organize by views
+        movies_organized.sort(key=lambda x:x[12]) 
 
     global USER_ID
     USER_ID = user_id
@@ -183,8 +186,8 @@ def menu(user_id, gender: List = []):  # menu function
     for i in range(len(movie_cat_list)):
         listbox_gender_option.insert(END, movie_cat_list[i])
 
-    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(btn, listbox_gender_option, panel_catalog_movie, user_id, window_menu), 65, 200)
+    btn_filter = function.place_button(window_menu, "Filter", "black", lambda : select(listbox_gender_option, panel_catalog_movie, user_id, window_menu), 65, 200)
 
-    render_movies_list(gender)
+    render_movies_list(movies_organized)
 
     window_menu.mainloop()
